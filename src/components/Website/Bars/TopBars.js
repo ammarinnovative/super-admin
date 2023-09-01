@@ -6,7 +6,7 @@ import CustomHeading from '../Headings/CustomHeading';
 export default function TopBars() {
   return (
     <>
-      <Box w={'165px'} alignItems={"center"} >
+      <Box w={'165px'}>
         <Image src={Topbar} borderRadius={'12'} mb={'14px'} />
         <CustomHeading fontSize={'20px'} textAlign={'left'} color={'#fff'}>
           Amsterdam Club

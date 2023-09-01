@@ -10,7 +10,7 @@ export default function FeaturedBar() {
       <Box bg={'#1d1d1d'} borderRadius={'12'}>
         <Image src={f1} borderRadius={'6'} />
         <Box px={'3'} py={'6'}>
-          <CustomHeading  color={'wcolor.100'} fontSize={'20px'} textAlign={'left'}>
+          <CustomHeading fontSize={'20px'} textAlign={'left'}>
             New Amsterdam Club
           </CustomHeading>
           <Link as={ReactLink} to={'/StoreProfile'} color={'#fff'}>

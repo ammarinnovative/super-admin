@@ -6,15 +6,16 @@ import Mobile from '../../../assets/images/shorts/mobile.png';
 import PrimaryBtn from '../Buttons/PrimaryBtn';
 import { useNavigate } from 'react-router';
 export default function AboutSilder() {
-  const navigate = useNavigate();
+
+    const navigate = useNavigate();
   return (
     <>
       <Box>
-        <Stack direction={{ base: 'column', lg: 'row' }} alignItems={'center'}>
+        <Stack direction={'row'} alignItems={'center'}>
           <Box w={'30%'}>
             <Image src={Mobile} />
           </Box>
-          <Box w={{base:"100%",lg:"55%"}} pb={"70px"}>
+          <Box w={'55%'}>
             <CustomHeading textAlign={'left'} color={'#fff'} fontSize={'35px'}>
               Queue Management System
             </CustomHeading>
@@ -30,21 +31,10 @@ export default function AboutSilder() {
             </CustomPara>
             <Link
               w={{ base: '120px', xl: 'auto' }}
-              display={{ base: 'none', '2xl': 'inline-block' }}
-              onClick={() => navigate('/dashboard/login')}
-              bg={'wcolor.100'}
-              color={'#fff'}
-              border={'1px solid #dc0b9b'}
-              px={'8'}
-              py={'3'}
-              borderRadius={'6'}
-              _hover={{
-                bg: 'transparent',
-                boxShadow: 'none',
-                transform: 'translateY(2px)',
-              }}
+              display={{ base: 'none', lg: 'flex' }}
+              onClick={() => navigate('/register')}
             >
-              Get Started
+              <PrimaryBtn value={'Get Started'} />
             </Link>
           </Box>
         </Stack>

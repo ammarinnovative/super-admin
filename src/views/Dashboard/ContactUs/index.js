@@ -18,9 +18,6 @@ import { AiOutlineStar } from 'react-icons/ai';
 import PrimaryBtn from '../../../components/Website/Buttons/PrimaryBtn';
 import ContactFields from '../../../components/Website/Contact/ContactFields';
 import { POST } from '../../../utilities/ApiProvider';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 export default function Index() {
 
@@ -34,17 +31,7 @@ export default function Index() {
       message: '',
       comment : ""
     });
-
-    const [localItem, setLocalItem] = useState(false);
-
-  const navigate = useNavigate();
-
-  const user = useSelector(state=>state?.value);
-  useEffect(() => {
-    if(!user){
-      navigate("/dashboard/login");
-    }
-  }, [user]);
+  
     const submitForm = async () => {
       try {
         setisLoading(true);
@@ -69,7 +56,7 @@ export default function Index() {
         formData.append('bar', null);
         formData.append('comment', Fields.comment);
   
-        let response = await POST('rating', formData, {
+        let response = await POST('/rating', formData, {
           'Content-Type': 'application/x-www-form-urlencoded',
         });
 
@@ -133,13 +120,13 @@ export default function Index() {
         formData.append('message', Fields.message);
         formData.append('type', "barInquiry");
   
-        let response = await POST('inquiry', formData, {
+        let response = await POST('/inquiry', formData, {
           'Content-Type': 'application/x-www-form-urlencoded',
         });
      
         toast({
           description: response.message,
-          status: "success",
+          status: response.status,
           isClosable: true,
           position: 'bottom-left',
           duration: 2500,
@@ -168,7 +155,7 @@ export default function Index() {
 
   return (
     <>
-    <MainDashboard>
+      <MainDashboard>
         <Stack p={'4'} gap={'4'}>
           <Stack bg={'dashbg.100'} p={'5'} gap={'4'}>
             <CustomHeading
@@ -207,14 +194,14 @@ export default function Index() {
             />
             <Button
                     onClick={() => submitForm()}
-                    bgColor={'pHeading.100'}
+                    bgColor={'#dc0b9b'}
                     color={'#fff'}
                     borderRadius={6}
                     fontWeight={'600'}
                     px={'50px'}
                     py={6}
                     fontSize={'17px'}
-                    border={'2px solid pHeading.100'}
+                    border={'2px solid #fff'}
                     borderColor={'#dc0b9b'}
                     _hover={{
                       bgColor: 'transparent',
@@ -296,7 +283,6 @@ export default function Index() {
                 />
                 <Textarea
                   py={'4'}
-                  color={'#fff'}
                   height={'100px'}
                   placeholder={'Message'}
                   name={'message'}
@@ -323,14 +309,14 @@ export default function Index() {
                 ></Textarea>
                 <Button
                     onClick={() => submitQuery()}
-                    bgColor={'pHeading.100'}
+                    bgColor={'#dc0b9b'}
                     color={'#fff'}
                     borderRadius={6}
                     fontWeight={'600'}
-                    px={'50px'} 
+                    px={'50px'}
                     py={6}
                     fontSize={'17px'}
-                    border={'2px solid pHeading.100'}
+                    border={'2px solid #fff'}
                     borderColor={'#dc0b9b'}
                     _hover={{
                       bgColor: 'transparent',

@@ -21,17 +21,18 @@ export default function TeamDetail() {
 
 
   const getTeamMembers = async () => {
-    var response = await GET(`teammember/${bar.barInfo}`);
+    var response = await GET(`/teammember/${bar.barInfo}`);
     setMembers(response.data)
   }
 
-
+  useEffect(() => console.log(members), [members])
   return (
 
     <>
       {
-        members.map(m => (
-          <Stack  p={'4'} bg={'dashbg.100'}>
+        members?.length &&
+        members?.map(m => (
+          <Stack p={'4'} bg={'dashbg.100'}>
             <Box>
               <CustomHeading
                 fontSize={'25px'}
@@ -45,7 +46,7 @@ export default function TeamDetail() {
 
               {
                 m.members.map((e) => {
-                  return <Teammemberdetails  members={e} />
+                  return <Teammemberdetails members={e} />
                 })
               }
 

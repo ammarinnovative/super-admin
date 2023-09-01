@@ -19,34 +19,34 @@ export default function Featured() {
       mt={'0 !important'}>
         <Container maxW={'6xl'} p={{ base: '15px !important', '2xl': 0 }}>
           <Stack>
-            <Stack display={"flex"} justifyContent={"center"} direction={{base:"column",lg:"row"}} alignItems={'center'} mb={'20'}>
+            <Stack direction={'row'} alignItems={'center'} mb={'20'}>
               <Box w={'80%'}>
-                <CustomHeading textAlign={{base:"center",lg:"left"}} color={'#fff'}>
+                <CustomHeading textAlign={'left'} color={'#fff'}>
                   Featured Bars & Clubs
                 </CustomHeading>
-                <CustomPara textAlign={{base:"center",lg:"left"}}>
+                <CustomPara>
                   Ut enim ad minim veniam, quis nostrud exercitation ullamco
                   laboris <br />
                   nisi ut aliquip ex ea commodo consequat.
                 </CustomPara>
               </Box>
-              <Box w={'20%'} textAlign={'right'}>
+              <Box w={'20%'} textAlign={'right'} marginRight={'auto'}>
                 <Link
                   textAlign={'center'}
+                  margin={'auto'}
                   p={'10px'}
                   w={'150px'}
                   border={'1px solid #fff'}
                   borderRadius={'6px'}
                   color={'#fff'}
                   display={'block'}
-                  
                 >
                   View All
                 </Link>
               </Box>
             </Stack>
           </Stack>
-          <Stack direction={'row'} display={"flex"} justifyContent={{base:"center",lg:"left"}}  gap={'6'}>
+          <Stack direction={'row'} gap={'6'}>
             <FeaturedBar/>
            
           </Stack>

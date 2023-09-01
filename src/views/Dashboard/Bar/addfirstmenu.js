@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useEffect } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { HeadFootEnabler } from '../../../utilities/HeadFootEnabler';
 import Signupimg from '../../../assets/images/Banner/signup.jpg';
 import CustomHeading from '../../../components/Website/Headings/CustomHeading';
@@ -27,21 +27,9 @@ import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Icon } from '@chakra-ui/icons';
 import { Link as ReactLink } from 'react-router-dom';
-import { imgUrl } from '../../../utilities/Config';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
 
-export default function Addfirstmenu(props) {
+export default function Addfirstmenu() {
   const location = useLocation();
-
-  const navigate = useNavigate();
-  const user = useSelector(state => state?.value);
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/dashboard/login');
-    }
-  }, [user]);
 
   useEffect(() => {
     HeadFootEnabler(location);
@@ -53,7 +41,6 @@ export default function Addfirstmenu(props) {
         backgroundRepeat={'no-repeat'}
         backgroundSize={'cover'}
         backgroundImage={Signupimg}
-        minH={'100vh'}
         py={'32'}
       >
         <Container maxW={'6xl'}>
@@ -88,10 +75,10 @@ export default function Addfirstmenu(props) {
                         >
                           <Box flex="1" textAlign="left">
                             <Text fontSize={{ base: '12px', md: '13px' }}>
-                              {/* {location?.state?.parent ?? ''} */}
+                              Spirits
                             </Text>
                             <Text fontSize={{ base: '12px', md: '16px' }}>
-                              {/* {location?.state?.child ?? ''} */}
+                              Bourbon
                             </Text>
                           </Box>
                           {isExpanded ? (
@@ -126,56 +113,47 @@ export default function Addfirstmenu(props) {
                               />
                             </FormControl>
                           </Stack>
-                          <Stack
-                            direction={'row'}
-                            flexWrap={'wrap'}
-                            gap={'2'}
-                            spacing={'0'}
-                          >
-                            {location?.state?.menu?.map(menu => {
-                              return (
-                                <Stack
-                                  bg={'#2c2a2a'}
-                                  boxShadow="base"
-                                  p="6"
-                                  rounded="md"
-                                >
-                                  <Stack>
-                                    <Img
-                                      height={'150px'}
-                                      borderRadius={'6'}
-                                      src={imgUrl + menu.picture}
-                                    />
-                                    <CustomPara marginBottom={'0'}>
-                                      {menu.menu_name}
-                                    </CustomPara>
-                                  </Stack>
-                                  <Stack gap={'2'}>
-                                    <FormControl>
-                                      <FormLabel>1.50z</FormLabel>
-                                      <Input
-                                        outline={'1px solid #fff'}
-                                        type="email"
-                                      />
-                                    </FormControl>
-                                    <FormControl>
-                                      <FormLabel>Shot</FormLabel>
-                                      <Input
-                                        outline={'1px solid #fff'}
-                                        type="email"
-                                      />
-                                    </FormControl>
-                                    <FormControl>
-                                      <FormLabel>Neat/Rocks</FormLabel>
-                                      <Input
-                                        outline={'1px solid #fff'}
-                                        type="email"
-                                      />
-                                    </FormControl>
-                                  </Stack>
-                                </Stack>
-                              );
-                            })}
+                          <Stack direction={'row'} flexWrap={'wrap'} gap={'3'}>
+                            <Stack
+                              bg={'#2c2a2a'}
+                              boxShadow="base"
+                              p="6"
+                              rounded="md"
+                            >
+                              <Stack>
+                                <Img
+                                  height={'150px'}
+                                  borderRadius={'6'}
+                                  src={menuimg}
+                                />
+                                <CustomPara marginBottom={'0'}>
+                                  Knob Creek
+                                </CustomPara>
+                              </Stack>
+                              <Stack gap={'2'}>
+                                <FormControl>
+                                  <FormLabel>1.50z</FormLabel>
+                                  <Input
+                                    outline={'1px solid #fff'}
+                                    type="email"
+                                  />
+                                </FormControl>
+                                <FormControl>
+                                  <FormLabel>Shot</FormLabel>
+                                  <Input
+                                    outline={'1px solid #fff'}
+                                    type="email"
+                                  />
+                                </FormControl>
+                                <FormControl>
+                                  <FormLabel>Neat/Rocks</FormLabel>
+                                  <Input
+                                    outline={'1px solid #fff'}
+                                    type="email"
+                                  />
+                                </FormControl>
+                              </Stack>
+                            </Stack>
 
                             <Stack
                               bg={'#2c2a2a'}
@@ -184,6 +162,7 @@ export default function Addfirstmenu(props) {
                               rounded="md"
                             >
                               <Stack
+                                
                                 height={'140px'}
                                 borderRadius={'6'}
                                 border={'1px dashed #fff'}

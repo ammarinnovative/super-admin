@@ -40,7 +40,7 @@ export default function InerBannner({simpleHeading}) {
                 >
                   {simpleHeading}
                 </Heading>
-                <CustomPara textAlign={{base:"center",md:"left"}} color={'primaryText.100'}>{`Home / ${simpleHeading}`}</CustomPara>
+                <CustomPara color={'primaryText.100'}>{`Home / ${simpleHeading}`}</CustomPara>
 
             
               </Stack>

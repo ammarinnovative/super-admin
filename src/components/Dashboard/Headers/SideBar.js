@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import {
   IconButton,
   Avatar,
@@ -35,46 +35,28 @@ import {
   FiBell,
   FiChevronDown,
 } from 'react-icons/fi';
-import { AiOutlineDollar ,AiOutlineBorderOuter} from 'react-icons/ai';
-import { Link as Reactlink, useNavigate } from 'react-router-dom';
+import { AiOutlineDollar } from 'react-icons/ai';
+import { Link as Reactlink } from 'react-router-dom';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
 import logo from '../../../assets/images/logo/logo2.png';
-import { logout } from '../../../reducers/useReducers';
-import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-
 
 const LinkItems = [
   { name: 'Home', icon: FiHome, url: '/dashboard' },
   { name: 'Menu', icon: FiTrendingUp, url: '/dashboard/menu' },
-  { name: 'Subscription', icon: AiOutlineDollar, url:'/dashboard/subscription' },
+  { name: 'SubScription', icon: AiOutlineDollar, url:'/dashboard/subscription' },
+  { name: 'Wallet', icon: AiOutlineDollar, url:'/dashboard/wallet' },
+  { name: 'Users', icon: AiOutlineDollar, url:'/dashboard/users' },
   { name: 'Event', icon: FiStar ,url:'/dashboard/event'},
   // { name: 'Feed', icon: FiHome, url:'/dashboard/feed' },
-  { name: 'Order', icon: AiOutlineBorderOuter, url:'/Order' },
   { name: 'Analytics', icon: FiTrendingUp,url:'/dashboard/analytics' },
-  { name: 'Promotions', icon: FiCompass,url : '/dashboard/promotions' },
+  { name: 'promotions', icon: FiCompass,url : '/dashboard/promotions' },
   { name: 'Settings', icon: FiStar,url:'/dashboard/setting' },
   { name: 'Team Members', icon: FiSettings ,url:'/dashboard/teammembers' },
   { name: 'Contact Us', icon: FiSettings,url:'/dashboard/Contact' },
 ];
 
 export default function SidebarWithHeader({ children, title }) {
-
-const [Loc,setLoc]= useState("/dashboard");
-
-  const location = useLocation();
-useEffect(()=>{
-  let tempLoc = String(location.pathname).split('/')[2];
-  if(tempLoc != undefined || tempLoc != "" || tempLoc != null){
-    setLoc(tempLoc);
-  }
-  else{
-    tempLoc("/dashboard");
-  }
-},[])
-
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('#121212', '#000')}>
@@ -119,15 +101,14 @@ const SidebarContent = ({ onClose, ...rest }) => {
         pt={'4'}
         alignItems="center"
         mb={'5'}
-        justifyContent="center"
+        justifyContent="space-between"
       >
-        <Link  as={Reactlink} to="/dashboard"><Image w={'90px'} src={logo} m={'auto'} />
+        <Image w={'90px'} src={logo} m={'auto'} />
         <CloseButton
           color={'#7a7a7a'}
           display={{ base: 'flex', md: 'none' }}
           onClick={onClose}
-        /></Link>
-        
+        />
       </Flex>
       {LinkItems.map(link => (
         <NavItem key={link.name} icon={link.icon} url={link.url}>
@@ -139,7 +120,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
 };
 
 const NavItem = ({ icon, url, children, ...rest }) => {
-  const location = useLocation();
   return (
     <Link
       as={Reactlink}
@@ -151,12 +131,14 @@ const NavItem = ({ icon, url, children, ...rest }) => {
         align="center"
         p="4"
         mx="4"
-        // color="#7a7a7a"
+        color="#7a7a7a"
         borderRadius="lg"
         role="group"
-        color="white"
-        bg={location.pathname===url?"pink.500":"transparent"}
         cursor="pointer"
+        _hover={{
+          bg: 'pHeading.100',
+          color: 'white',
+        }}
         {...rest}
       >
         {icon && (
@@ -177,10 +159,6 @@ const NavItem = ({ icon, url, children, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, title, ...rest }) => {
-
-const navigate = useNavigate()
-const dispatch = useDispatch();
-
   return (
     <Flex
       ml={{ base: 0, md: '270px' }}
@@ -259,11 +237,7 @@ const dispatch = useDispatch();
                 <MenuItem>Settings</MenuItem>
                 <MenuItem>Billing</MenuItem>
                 <MenuDivider />
-                <MenuItem  onClick={() => {
-                dispatch(logout())
-                 navigate('/dashboard/login')
-                }}
-                >Sign out</MenuItem>
+                <MenuItem>Sign out</MenuItem>
               </MenuList>
             </Menu>
           </Flex>

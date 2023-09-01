@@ -35,24 +35,15 @@ import {
 } from 'react-icons/ai';
 import { BsCreditCard } from 'react-icons/bs';
 import  {FaPaypal} from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
-
-
 export default function Index() {
   const location = useLocation();
 
-  const user = useSelector(state=>state?.value);
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if(!user){
-      navigate("/dashboard.login");
-    }
-  }, [user]);
+    HeadFootEnabler(location);
+  }, [location]);
 
   const signupstyle = {
+    w: '48%',
     outline: '1px solid #fff',
     py: '25px',
     bg: '#271623b5',
@@ -175,22 +166,22 @@ export default function Index() {
         <Container maxW={'6xl'}>
           <Stack mb={'12'}>
             <Img margin={'auto'} mb={'4'} w={'150px'} src={logo} />
-            <CustomHeading fontSize={{base:"25px",md:"30px",lg:"40px"}} color={'#fff'}>
+            <CustomHeading color={'#fff'}>
               Choose Your Payment Method
             </CustomHeading>
           </Stack>
-          <Tabs >
+          <Tabs>
             <TabList
               borderRadius={'6'}
               border={'1px solid #fff'}
-              w={{base:"full",lg:"fit-content"}}
+              w={'fit-content'}
               justifyContent={'center'}
               margin={'auto'}
               mb={'10'}
               borderBottom={'0px solid'}
-              flexDirection={{base:"column",lg:"row"}}
             >
               <Tab sx={settb}>
+                
                 <Icon sx={cards} as={BsCreditCard} /> Cards
               </Tab>
               <Tab sx={settb}>
@@ -201,8 +192,8 @@ export default function Index() {
 
             <TabPanels>
               <TabPanel>
-                <Stack mb={4} direction={{base:"column",lg:"row"}} alignItems={'center'} gap={'8'}>
-                  <CustomPara fontSize={{base:"20px",md:"25px"}} marginBottom={0}>
+                <Stack mb={4} direction={'row'} alignItems={'center'} gap={'8'}>
+                  <CustomPara marginBottom={0}>
                     We accpet these payment methods
                   </CustomPara>
                   <Img src={Cards} />
@@ -220,7 +211,6 @@ export default function Index() {
                     placeholder={'Name'}
                     type="Name"
                     _placeholder={{ color: '#fff' }}
-                    w={{base:"100%",lg:"48%"}}
                     value={Fields.name}
                     setFields={name => setFields({ ...Fields, name })}
                   />
@@ -230,7 +220,6 @@ export default function Index() {
                     type="email"
                     _placeholder={{ color: '#fff' }}
                     value={Fields.email}
-                    w={{base:"100%",lg:"48%"}}
                     setFields={email => setFields({ ...Fields, email })}
                   />
                   <Input
@@ -239,7 +228,6 @@ export default function Index() {
                     type="Password"
                     _placeholder={{ color: '#fff' }}
                     value={Fields.password}
-                    w={{base:"100%",lg:"48%"}}
                     setFields={password => setFields({ ...Fields, password })}
                   />
                   <Input
@@ -248,7 +236,6 @@ export default function Index() {
                     type="ConfirmPassword"
                     _placeholder={{ color: '#fff' }}
                     value={Fields.confirmpassword}
-                    w={{base:"100%",lg:"48%"}}
                     setFields={confirmpassword =>
                       setFields({ ...Fields, confirmpassword })
                     }
@@ -266,33 +253,32 @@ export default function Index() {
                   </Checkbox>
                 </Stack>
                 <Stack mb={'12'} textAlign={'center'}>
-                
+                <Link  as={ReactLink} to={'/dashboard/profile'}>
             <Button
-                 as={ReactLink} to={'/dashboard/profile'}
-                 bgColor={'#dc0b9b'}
-                 w={{base : 'fit-content', '2xl' : '350px' }}
-                 color={'#fff'}
-                 borderRadius={6}
-                 fontWeight={'600'}
-                 margin={'auto'}
-                 py={6}
-                 px={'12'}
-                 fontSize={'17px'}
-                 border={'2px solid #fff'}
-                 borderColor={'#dc0b9b'}
-                 _hover={{
-                   bgColor: 'transparent',
-                   color: '#fff',
-                 }}
+                 
+                    bgColor={'#dc0b9b'}
+                    color={'#fff'}
+                    borderRadius={6}
+                    fontWeight={'600'}
+                    px={'50px'}
+                    py={6}
+                    fontSize={'17px'}
+                    border={'2px solid #fff'}
+                    borderColor={'#dc0b9b'}
+                    _hover={{
+                      bgColor: 'transparent',
+                      color: '#fff',
+                    }}
+                    isLoading={isLoading}
                   >
                     Complete Purchase
                   </Button>
-          
+            </Link>
                 </Stack>
               </TabPanel>
               <TabPanel>
                 <Stack mb={4} direction={'row'} alignItems={'center'} gap={'8'}>
-                  <CustomPara marginBottom={0} fontSize={{base:"20px",md:"25px"}}>
+                  <CustomPara marginBottom={0}>
                     We are accpet these payment methods
                   </CustomPara>
                   <Img src={Cards} />
@@ -352,30 +338,27 @@ export default function Index() {
                   </Checkbox>
                 </Stack>
                 <Stack mb={'12'}>
-                <Stack mb={'12'} textAlign={'center'}>
-                
-                <Button
-                     as={ReactLink} to={'/dashboard/profile'}
-                     bgColor={'#dc0b9b'}
-                     w={{base : 'fit-content', '2xl' : '350px' }}
-                     color={'#fff'}
-                     borderRadius={6}
-                     fontWeight={'600'}
-                     margin={'auto'}
-                     py={6}
-                     px={'12'}
-                     fontSize={'17px'}
-                     border={'2px solid #fff'}
-                     borderColor={'#dc0b9b'}
-                     _hover={{
-                       bgColor: 'transparent',
-                       color: '#fff',
-                     }}
-                      >
-                        Complete Purchase
-                      </Button>
-              
-                    </Stack>
+            <Link as={ReactLink} to={'/dashboard/profile'}>
+            <Button
+                 
+                    bgColor={'#dc0b9b'}
+                    color={'#fff'}
+                    borderRadius={6}
+                    fontWeight={'600'}
+                    px={'50px'}
+                    py={6}
+                    fontSize={'17px'}
+                    border={'2px solid #fff'}
+                    borderColor={'#dc0b9b'}
+                    _hover={{
+                      bgColor: 'transparent',
+                      color: '#fff',
+                    }}
+                    isLoading={isLoading}
+                  >
+                    Complete Purchase
+                  </Button>
+            </Link>
                 </Stack>
               </TabPanel>
             </TabPanels>

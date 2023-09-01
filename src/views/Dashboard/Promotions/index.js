@@ -19,8 +19,6 @@ import {
   Input,
   Textarea,
   Checkbox,
-  Radio,
-  RadioGroup,
   Select,
   Switch,
   RangeSlider,
@@ -42,16 +40,11 @@ import { AiOutlineSearch, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Icon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { imgUrl } from '../../../utilities/Config';
-import moment from 'moment';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 export default function Index() {
-  const [categories, setCategories] = useState([]);
-  const [promotion, setPromotion] = useState([]);
-  const [catItems, setCatItems] = useState([]);
-  const navigate = useNavigate();
+  const [posts, setPost] = useState([]);
+  const [Hashtags, setHashtags] = useState([]);
+  const [hashtagData, sethashtagData] = useState([]);
   const toast = useToast();
   const [isLoading, setisLoading] = useState(false);
 
@@ -66,73 +59,43 @@ export default function Index() {
   const [overlay, setOverlay] = React.useState(<OverlayOne />);
 
   useEffect(() => {
-    getCategories();
-    getPromotion();
+    getHastags();
+    getPosts();
   }, []);
 
-  const getCategories = async () => {
-    var response = await GET('admin/parentCategory');
-    setCategories(response.data);
+  const getPosts = async () => {
+    var response = await GET('/post');
+    setPost(response.data);
   };
-  const getPromotion = async () => {
-    var response = await GET('promotion');
-
-    setPromotion(response.data);
+  const getHastags = async () => {
+    var response = await GET('/admin/hashtag');
+    setHashtags(response.data);
   };
-
-  function itemExists(value) {
-    return categories.some(function (el) {
-      if (el.name === value) {
-        setCatItems(el.items);
-      }
-    });
-  }
 
   const [Fields, setFields] = useState({
     upload_document: {},
-    menu: [],
   });
-
   let hastagArray = [];
   const submitForm = async () => {
     try {
-      //
-
-      let fromObject = moment(Fields.from + Fields.fromTime, 'YYYY-MM-DDLT');
-
-      // conversion
-      fromObject = fromObject.format('YYYY-MM-DDThh:mm:ssZ');
-
-      let toObject = moment(Fields.to + Fields.toTime, 'YYYY-MM-DDLT');
-
-      // conversion
-      toObject = toObject.format('YYYY-MM-DDThh:mm:ssZ');
-
       const formData = new FormData();
 
-      // if (Fields.title === '' && Fields.description === '') {
-      //   toast({
-      //     status: 'error',
-      //     title: 'Please fill in all the fields to proceed further.',
-      //     duration: 7000,
-      //     isClosable: true,
-      //     position: 'bottom-left',
-      //   });
-      //   return;
-      // }
+      if (Fields.title === '' && Fields.description === '') {
+        toast({
+          status: 'error',
+          title: 'Please fill in all the fields to proceed further.',
+          duration: 7000,
+          isClosable: true,
+          position: 'bottom-left',
+        });
+        return;
+      }
 
-      formData.append('title', Fields.title);
-      formData.append('from', fromObject);
-      formData.append('to', toObject);
-      formData.append('price', 5);
-      formData.append('category', '63e42b9174085ec04658efe1');
-      formData.append('repeat', true);
-      formData.append('menu', JSON.stringify(Fields.menu));
+      formData.append('title', Fields.heading);
+      formData.append('description', Fields.description);
+      formData.append('hastags', hashtagData);
 
-      var response = await POST('/promotion', formData);
-
-      console.log(response);
-      debugger;
+      var response = await POST('/post', formData);
 
       toast({
         description: response.message,
@@ -142,10 +105,10 @@ export default function Index() {
         duration: 2500,
       });
 
-      // setFields({
-      //   username: '',
-      //   password: '',
-      // });
+      setFields({
+        username: '',
+        password: '',
+      });
 
       setisLoading(false);
     } catch (err) {
@@ -167,13 +130,6 @@ export default function Index() {
     color: '#fff',
   };
 
-  const user = useSelector(state => state?.value);
-  useEffect(() => {
-    if (!user) {
-      navigate('/dashboard/login');
-    }
-  }, [user]);
-
   return (
     <>
       <MainDashboard>
@@ -194,12 +150,6 @@ export default function Index() {
                   type="Name"
                   _placeholder={{ color: '#fff' }}
                   value={Fields.title}
-                  onChange={e => {
-                    setFields({
-                      ...Fields,
-                      title: e.target.value,
-                    });
-                  }}
                 />
 
                 <Stack
@@ -225,12 +175,6 @@ export default function Index() {
                         w={'full'}
                         color={'#fff'}
                         outline={'1px solid #fff'}
-                        onChange={e => {
-                          setFields({
-                            ...Fields,
-                            from: e.target.value,
-                          });
-                        }}
                       />
                     </Box>
                     <Box w={'full'} position={'relative'}>
@@ -250,12 +194,6 @@ export default function Index() {
                         w={'full'}
                         color={'#fff'}
                         outline={'1px solid #fff'}
-                        onChange={e => {
-                          setFields({
-                            ...Fields,
-                            to: e.target.value,
-                          });
-                        }}
                       />
                     </Box>
                   </Stack>
@@ -277,12 +215,6 @@ export default function Index() {
                         w={'full'}
                         color={'#fff'}
                         outline={'1px solid #fff'}
-                        onChange={e => {
-                          setFields({
-                            ...Fields,
-                            fromTime: e.target.value,
-                          });
-                        }}
                       />
                     </Box>
                     <Box w={'full'} position={'relative'}>
@@ -302,12 +234,6 @@ export default function Index() {
                         w={'full'}
                         color={'#fff'}
                         outline={'1px solid #fff'}
-                        onChange={e => {
-                          setFields({
-                            ...Fields,
-                            toTime: e.target.value,
-                          });
-                        }}
                       />
                     </Box>
                   </Stack>
@@ -318,7 +244,7 @@ export default function Index() {
                   justifyContent={'space-between'}
                   alignItems={'center'}
                 >
-                  {/* <Box w={'full'} position={'relative'}>
+                  <Box w={'full'} position={'relative'}>
                     <FormLabel
                       fontWeight={'600'}
                       color={'#fff'}
@@ -342,25 +268,14 @@ export default function Index() {
                       <CustomPara fontSize={'12px'}>%10</CustomPara>
                       <CustomPara fontSize={'12px'}>%100</CustomPara>
                     </Box>
-                  </Box> */}
+                  </Box>
                   <Box w={'full'} position={'relative'}>
                     <FormControl display="flex" alignItems="center">
                       <Switch colorScheme={'pink'} id="email-alerts" />{' '}
-                      <FormLabel htmlFor="email-alerts" mb="0" color={"#fff"} pl={'5px'}>
-                        Infinite Date
-                      </FormLabel>
-                    </FormControl>
-
-
-                    <FormControl display="flex" alignItems="center" mt={'10px'}>
-                      <Switch colorScheme={'pink'} id="email-alerts" />{' '}
-                      <FormLabel htmlFor="email-alerts" mb="0" color={"#fff"} pl={'5px'}>
+                      <FormLabel htmlFor="email-alerts" mb="0">
                         Repeat Promotion
                       </FormLabel>
                     </FormControl>
-
-                
-
                   </Box>
                 </Stack>
 
@@ -405,37 +320,27 @@ export default function Index() {
                   flexWrap={'wrap'}
                   color={'#fff'}
                 >
-                  {categories.map(e => {
+                  {Hashtags?.length &&
+                  Hashtags?.map(e => {
                     return (
-                      <RadioGroup
-                        p={'3px'}
+                      <Checkbox
+                      p={'3px'}
                         border={'0px solid #fff'}
                         position={'relative'}
                         borderRadius={'6'}
-                        spacing={'0'}
+                      spacing={'0'}
                         className="chckbox"
                         value={e._id}
                         onChange={e => {
-                          itemExists(e);
-                          setFields({
-                            ...Fields,
-                            cat: e,
-                          });
+                          hashtagData.push(e.target.value);
+                          sethashtagData(hashtagData);
                         }}
                       >
-                        <Stack
-                          borderRadius={'6'}
-                          justifyContent={'right'}
-                          alignItems={'end'}
-                          w={'120px'}
-                          height={'100px'}
-                          backgroundSize={'cover'}
-                          backgroundImage={imgUrl + e.category_image}
-                          direction={'row'}
-                        >
-                          <Radio value={e.name}>{e.name}</Radio>
+                        <Stack borderRadius={'6'} justifyContent={'right'} alignItems={'end'}  w={'120px'}
+                        height={'100px'} backgroundSize={'cover'} backgroundImage={Cat1} direction={'row'}>
+                          <Text>{e.name}</Text>
                         </Stack>
-                      </RadioGroup>
+                      </Checkbox>
                     );
                   })}
                 </Stack>
@@ -446,33 +351,24 @@ export default function Index() {
                   flexWrap={'wrap'}
                   color={'#fff'}
                 >
-                  {catItems.map(e => {
+                  {Hashtags?.length &&
+                  Hashtags?.map(e => {
                     return (
                       <Checkbox
-                        p={'3px'}
+                      p={'3px'}
                         border={'0px solid #fff'}
                         position={'relative'}
                         borderRadius={'6'}
-                        spacing={'0'}
+                      spacing={'0'}
                         className="chckbox"
                         value={e._id}
                         onChange={e => {
-                          setFields({
-                            ...Fields,
-                            menu: [...Fields.menu, { item: e.target.value }],
-                          });
+                          hashtagData.push(e.target.value);
+                          sethashtagData(hashtagData);
                         }}
                       >
-                        <Stack
-                          borderRadius={'6'}
-                          justifyContent={'right'}
-                          alignItems={'end'}
-                          w={'120px'}
-                          height={'100px'}
-                          backgroundSize={'cover'}
-                          backgroundImage={imgUrl + e.picture}
-                          direction={'row'}
-                        >
+                        <Stack borderRadius={'6'} justifyContent={'right'} alignItems={'end'}  w={'120px'}
+                        height={'100px'} backgroundSize={'cover'} backgroundImage={MenuItems} direction={'row'}>
                           <Text>{e.name}</Text>
                         </Stack>
                       </Checkbox>
@@ -483,12 +379,7 @@ export default function Index() {
             </ModalBody>
             <ModalFooter>
               <Stack direction={'row'} w={'full'} justifyContent={'center'}>
-                <Button
-                  onClick={() => submitForm()}
-                  bg={'pHeading.100'}
-                  color={'#fff'}
-                  px={'14'}
-                >
+                <Button bg={'pHeading.100'} color={'#fff'} px={'14'}>
                   Post
                 </Button>
                 <Button onClick={onClose}>Discard</Button>
@@ -498,28 +389,27 @@ export default function Index() {
         </Modal>
         <Stack p={'4'} gap={'6'}>
           <Stack direction={'row'} justifyContent={'space-between'}>
-            <Box display={'flex'} alignItems={'center'} gap={'4'}></Box>
-            <Box>
-              <Flex
-                alignItems={'center'}
-                direction={{ base: 'column', lg: 'row' }}
-                gap={'3'}
+            <Box display={'flex'} alignItems={'center'} gap={'4'}>
+              <CustomHeading
+                fontSize={'30px'}
+                color={'#fff'}
+                textAlign={'left'}
               >
+                Spirits
+              </CustomHeading>
+            </Box>
+            <Box>
+              <Flex alignItems={'center'} gap={'3'}>
                 <Box>
                   <FormControl display="flex" alignItems="center">
                     <Switch colorScheme="pink" id="email-alerts" />
                     <FormLabel
-                      color={'white'}
+                      color={'#fff'}
                       pl={'4'}
                       htmlFor="email-alerts"
                       mb="0"
-                      display={"flex"}
-                       alignItems={"center"}
                     >
-                      Send Free Ticket After First Visit{' '}
-                      <Box width={"24px"} marginLeft={"10px"} display={"flex"} justifyContent={"center"} alignItems={"center"} height={"24px"} border={"1px solid pink"} rounded={'full'}>
-                        i
-                      </Box>
+                      Send Free Ticket After First Visit
                     </FormLabel>
                   </FormControl>
                 </Box>
@@ -542,99 +432,595 @@ export default function Index() {
                       onOpen();
                     }}
                   >
-                    Create Promotion
+                    Create Promopost
                   </Button>
                 </Box>
               </Flex>
             </Box>
           </Stack>
 
-          {promotion.map(e => {
-            return (
-              <Stack>
-                <Box>
+          <Stack>
+            <Stack flexWrap={'wrap'} direction={'row'} gap={'4'}>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
                   <CustomHeading
-                    fontSize={'30px'}
-                    color={'#fff'}
                     textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
                   >
-                    {e.name}
+                    Tito's Handmade Vodka
                   </CustomHeading>
-                </Box>
-                <Link to={'/dashboard/singlepromotion'} state={e}>
-                  <Stack
-                    flexWrap={'wrap'}
-                    direction={'row'}
-                    justifyContent={{ base: 'center', lg: 'left' }}
-                    gap={'4'}
-                    cursor={'pointer'}
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
                   >
-                    {e.menu.map(item => {
-                      return (
-                        <Box w={{ base: '100%', lg: '242px' }}>
-                          <Img width={'100%'} src={imgUrl + e.thumbnail} />
-                          <Stack p={'3'} bg={'dashbg.100'}>
-                            <CustomHeading
-                              textAlign={'left'}
-                              color={'#fff'}
-                              fontSize={'16px'}
-                            >
-                              {item.title}
-                            </CustomHeading>
+                    Tito's Handmade Vodka
+                  </CustomHeading>
 
-                            <Box>
-                              <Flex mb={'3'} justifyContent={'space-between'}>
-                                <Box>
-                                  <CustomHeading
-                                    mb={'0'}
-                                    color={'#fff'}
-                                    fontSize={'15px'}
-                                    textAlign={'left'}
-                                  >
-                                    Date:{' '}
-                                  </CustomHeading>
-                                  <CustomPara
-                                    color={'pHeading.100'}
-                                    fontSize={'13px'}
-                                  >
-                                    {' '}
-                                    {moment(item.from).format(
-                                      moment.HTML5_FMT.DATE
-                                    )}
-                                  </CustomPara>
-                                </Box>
-                                <Box>
-                                  <CustomHeading
-                                    mb={'0'}
-                                    color={'#fff'}
-                                    fontSize={'15px'}
-                                    textAlign={'left'}
-                                  >
-                                    Timeframe:{' '}
-                                  </CustomHeading>
-                                  <CustomPara
-                                    color={'pHeading.100'}
-                                    fontSize={'13px'}
-                                  >
-                                    {' '}
-                                    {moment(item.from).format(
-                                      moment.HTML5_FMT.TIME
-                                    )}
-                                  </CustomPara>
-                                </Box>
-                              </Flex>
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
 
-                              {/* <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} /> */}
-                            </Box>
-                          </Stack>
-                        </Box>
-                      );
-                    })}
-                  </Stack>
-                </Link>
-              </Stack>
-            );
-          })}
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+            </Stack>
+          </Stack>
+
+          <Stack>
+            <Box>
+              <CustomHeading
+                fontSize={'30px'}
+                color={'#fff'}
+                textAlign={'left'}
+              >
+                Kentucky Bourbon
+              </CustomHeading>
+            </Box>
+            <Stack flexWrap={'wrap'} direction={'row'} gap={'4'}>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+              <Box w={'242px'}>
+                <Img src={menu1} />
+                <Stack p={'3'} bg={'dashbg.100'}>
+                  <CustomHeading
+                    textAlign={'left'}
+                    color={'#fff'}
+                    fontSize={'16px'}
+                  >
+                    Tito's Handmade Vodka
+                  </CustomHeading>
+
+                  <Box>
+                    <Flex mb={'3'} justifyContent={'space-between'}>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Date:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          11/8/2022
+                        </CustomPara>
+                      </Box>
+                      <Box>
+                        <CustomHeading
+                          mb={'0'}
+                          color={'#fff'}
+                          fontSize={'15px'}
+                          textAlign={'left'}
+                        >
+                          Timeframe:{' '}
+                        </CustomHeading>
+                        <CustomPara color={'pHeading.100'} fontSize={'13px'}>
+                          {' '}
+                          2:00 PM - 3hrs
+                        </CustomPara>
+                      </Box>
+                    </Flex>
+
+                    <BorderButton w={'full'} Url={'./'} Btnctn={'$49.00'} />
+                  </Box>
+                </Stack>
+              </Box>
+            </Stack>
+          </Stack>
         </Stack>
       </MainDashboard>
     </>

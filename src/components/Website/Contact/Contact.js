@@ -101,7 +101,7 @@ export default function Contact() {
       mt={'0 !important'} >
         <Container maxW={'6xl'} p={{ base: '15px !important', '2xl': 0 }}>
           <Box mb={'12'}>
-            <CustomHeading textAlign={{base:"center",md:"left"}} color={'#fff'}>
+            <CustomHeading textAlign={'left'} color={'#fff'}>
               Contact Us
             </CustomHeading>
             <CustomPara>
@@ -110,10 +110,10 @@ export default function Contact() {
               nisi ut aliquip ex ea commodo consequat.
             </CustomPara>
           </Box>
-          <Stack direction={{base:"column",lg:"row"}}gap={'12'}>
-            <Box w={{base:"100%",lg:"30%"}}>
+          <Stack direction={'row'} gap={'12'}>
+            <Box w={'30%'}>
               <CustomHeading
-                textAlign={{base:"center",md:"left"}}
+                textAlign={'left'}
                 color={'#fff'}
                 fontSize={'30px'}
                 mb={'7'}
@@ -138,7 +138,6 @@ export default function Contact() {
                       fontSize={'20px'}
                       textAlign={'left'}
                       mb={'5px'}
-                      color={'wcolor.100'}
                     >
                       Call Us:
                     </CustomHeading>
@@ -161,7 +160,6 @@ export default function Contact() {
                     <CustomHeading
                       fontSize={'20px'}
                       textAlign={'left'}
-                      color={'wcolor.100'}
                       mb={'5px'}
                     >
                       Email Us:
@@ -171,10 +169,10 @@ export default function Contact() {
                 </Flex>
               </Stack>
             </Box>
-            <Box w={{base:"100%",lg:"70%"}} px={'8'} py={20} borderRadius={12} bg={'#dc0b9b'}>
+            <Box w={'70%'} px={'8'} py={20} borderRadius={12} bg={'#dc0b9b'}>
               <CustomHeading
                 color={'#fff'}
-                fontSize={{base:"20px",lg:"30px"}}
+                fontSize={'30px'}
                 textAlign={'left'}
                 mb={'20px'}
               >

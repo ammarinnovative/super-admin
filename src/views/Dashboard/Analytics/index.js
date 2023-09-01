@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { AiFillStar } from 'react-icons/ai';
-import React, { useState } from 'react';
+import React from 'react';
 import MainDashboard from '../MainDashboard';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
@@ -19,9 +19,7 @@ import M1 from '../../../assets/images/menu/m1.jpg';
 import BorderButton from '../../../components/Website/Buttons/BorderButton';
 import Event1 from '../../../assets/images/event/e1.jpg';
 import CustomPara from '../../../components/Website/Paragraph/CustomPara';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const options = {
@@ -65,76 +63,59 @@ export const data = {
   ],
 };
 
-export default function Index() {
-  const [localItem, setLocalItem] = useState(false);
-
-  const navigate = useNavigate();
-
-  const user = useSelector(state=>state?.value);
-  useEffect(() => {
-    if(!user){
-      navigate("/dashboard/login");
-    }
-  }, [user]);
-
+export default function index() {
   return (
     <>
       <MainDashboard>
         <Stack p={'4'} gap={'6'}>
           <Stack>
-            <CustomHeading textAlign={'left'} fontSize={'30px'} color={'pink.500'}>
+            <CustomHeading textAlign={'left'} fontSize={'30px'} color={'#fff'}>
               Overview
             </CustomHeading>
           </Stack>
-          <Stack
-            pb={'6'}
-            spacing={'0'}
-            flexWrap={'wrap'}
-            direction={'row'}
-            gap={'6'}
-          >
+          <Stack pb={'6'} direction={'row'} gap={'6'}>
             <OrderBox />
             <OrderBox />
             <OrderBox />
             <OrderBox />
             <OrderBox />
           </Stack>
-          <Stack gap={'6'} direction={{base:"column",lg:"row"}}>
-            <Stack w={{base:"100%",lg:"60%"}} gap={'6'}>
+          <Stack gap={'6'} direction={'row'}>
+            <Stack w={'60%'} gap={'6'}>
               <Stack>
                 <Box>
                   <CustomHeading
-                    textAlign={{base:"center",lg:"left"}}
+                    textAlign={'left'}
                     fontSize={'25px'}
-                    color={'pink.500'}
+                    color={'#fff'}
                   >
                     Events Analytics
                   </CustomHeading>
                 </Box>
                 <Stack
                   gap={'14'}
-                  direction={{base:"column",lg:"row"}}
+                  direction={'row'}
                   bg={'dashbg.100'}
                   px={'8'}
                   py={'4'}
                   alignItems={'center'}
                 >
-                  <Stack w={{base:"100%",lg:"50%"}}>
+                  <Stack w={'50%'}>
                     <CustomHeading
-                      textAlign={{base:"center",lg:"left"}}
+                      textAlign={'left'}
                       fontSize={'20px'}
-                      color={'pink.500'}
+                      color={'#fff'}
                     >
                       Best Selling Menu
                     </CustomHeading>
                     <Pie options={options} data={data} />
                   </Stack>
-                  <Stack w={{base:"100%",lg:"50%"}} alignItems={"center"} gap={'2'}>
+                  <Stack w={'50%'} gap={'2'}>
                     <Box>
                       <CustomHeading
                         textAlign={'left'}
-                        fontSize={{base:"17px",lg:"20px"}}
-                        color={'pink.500'}
+                        fontSize={'20px'}
+                        color={'#fff'}
                       >
                         Most Popular Menu Category
                       </CustomHeading>
@@ -148,8 +129,8 @@ export default function Index() {
                     <Box>
                       <CustomHeading
                         textAlign={'left'}
-                        fontSize={{base:"17px",lg:"20px"}}
-                        color={'pink.500'}
+                        fontSize={'20px'}
+                        color={'#fff'}
                       >
                         Most Popular Menu Category
                       </CustomHeading>
@@ -168,43 +149,44 @@ export default function Index() {
                   mb={'4'}
                   alignItems={'center'}
                   justifyContent={'space-between'}
-                  direction={{base:"column",lg:"row"}}
+                  direction={'row'}
                 >
                   <CustomHeading
                     mb={'0'}
-                    textAlign={{base:"center",lg:"left"}}
+                    textAlign={'left'}
                     fontSize={'23px'}
                     color={'#fff'}
                   >
                     Total Sales
                   </CustomHeading>
                   <Box>
-                    <BorderButton width={{base:"100%",lg:"40%"}} Url={'/'} Btnctn={'View Past Report'} />
+                    <BorderButton Url={'/'} Btnctn={'View Past Report'} />
                   </Box>
                 </Stack>
                 <Stack
+             
                   gap={'14'}
-                  direction={{base:"column",lg:"row"}}
+                  direction={'row'}
                   bg={'dashbg.100'}
                   px={'8'}
                   py={'4'}
                   alignItems={'center'}
                 >
-                  <Stack w={{base:"100%",lg:"row"}}>
+                  <Stack w={'50%'}>
                     <CustomHeading
-                      textAlign={{base:"center",lg:"left"}}
+                      textAlign={'left'}
                       fontSize={'20px'}
-                      color={'pink.500'}
+                      color={'#fff'}
                     >
                       Best Selling Menu
                     </CustomHeading>
                     <Pie options={options} data={data} />
                   </Stack>
-                  <Stack w={{base:"100%",lg:"row"}}>
+                  <Stack w={'50%'}>
                     <CustomHeading
                       textAlign={'left'}
                       fontSize={'20px'}
-                      color={'pink.500'}
+                      color={'#fff'}
                     >
                       Best Selling Menu
                     </CustomHeading>
@@ -213,12 +195,12 @@ export default function Index() {
                 </Stack>
               </Stack>
             </Stack>
-            <Stack w={{base:"100%",lg:"40%"}}>
+            <Stack w={'40%'}>
               <Box>
                 <CustomHeading
                   textAlign={'left'}
                   fontSize={'25px'}
-                  color={'pink.500'}
+                  color={'#fff'}
                 >
                   Events Analytics
                 </CustomHeading>
@@ -233,37 +215,22 @@ export default function Index() {
                     textAlign={'left'}
                     mb={'0'}
                     fontSize={'20px'}
-                    color={'pink.500'}
+                    color={'#fff'}
                   >
                     Events
                   </CustomHeading>
-                  <Link color={'pink.500'} to={'/'}>
+                  <Link color={'#fff'} to={'/'}>
                     View All
                   </Link>
                 </Box>
                 <UnorderedList>
                   <ListItem>
-                    <Stack
-                      pb={'3'}
-                      mt={'4'}
-                      borderBottom={'1px solid #fff'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      direction={'row'}
-                    >
+                    <Stack pb={'3'} mt={'4'} borderBottom={'1px solid #fff'} justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
                       <Box gap={'4'} alignItems={'center'} display={'flex'}>
                         <Image w={'100px'} src={Event1} />
                         <Box>
-                          <CustomHeading
-                            textAlign={'left'}
-                            color={'pink.500'}
-                            fontSize={{base:"18px",lg:"25px"}}
-                          >
-                            Friday Event
-                          </CustomHeading>
-                          <CustomPara color={'pHeading.100'}>
-                            Total Attendance : 11
-                          </CustomPara>
+                          <CustomHeading textAlign={'left'} color={'#fff'} fontSize={'25px'}>Friday Event</CustomHeading>
+                          <CustomPara color={'pHeading.100'}>Total Attendance : 11</CustomPara>
                         </Box>
                       </Box>
                       <Box alignItems={'center'} display={'flex'}>
@@ -271,21 +238,21 @@ export default function Index() {
                         <UnorderedList display={'flex'}>
                           <ListItem>
                             <Icon
-                              color={'pink.500'}
+                              color={'#ffee37'}
                               fontSize={'16px'}
                               as={AiFillStar}
                             />
                           </ListItem>
                           <ListItem>
                             <Icon
-                              color={'pink.500'}
+                              color={'#ffee37'}
                               fontSize={'16px'}
                               as={AiFillStar}
                             />
                           </ListItem>
                           <ListItem>
                             <Icon
-                              color={'pink.500'}
+                              color={'#ffee37'}
                               fontSize={'16px'}
                               as={AiFillStar}
                             />
@@ -302,27 +269,12 @@ export default function Index() {
                     </Stack>
                   </ListItem>
                   <ListItem>
-                    <Stack
-                      pb={'3'}
-                      mt={'4'}
-                      borderBottom={'1px solid #fff'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      direction={'row'}
-                    >
+                    <Stack pb={'3'} mt={'4'} borderBottom={'1px solid #fff'} justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
                       <Box gap={'4'} alignItems={'center'} display={'flex'}>
                         <Image w={'100px'} src={Event1} />
                         <Box>
-                          <CustomHeading
-                            textAlign={'left'}
-                            color={'pink.500'}
-                            fontSize={{base:"18px",lg:"25px"}}
-                          >
-                            Friday Event
-                          </CustomHeading>
-                          <CustomPara color={'pHeading.100'}>
-                            Total Attendance : 11
-                          </CustomPara>
+                          <CustomHeading textAlign={'left'} color={'#fff'} fontSize={'25px'}>Friday Event</CustomHeading>
+                          <CustomPara color={'pHeading.100'}>Total Attendance : 11</CustomPara>
                         </Box>
                       </Box>
                       <Box alignItems={'center'} display={'flex'}>

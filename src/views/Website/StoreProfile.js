@@ -31,7 +31,7 @@ export default function StoreProfile() {
           <Stack mb={20}>
             <StoreDetails />
           </Stack>
-          <Stack direction={{base:"column",lg:"row"}} alignItems={"center"} gap={'4'}>
+          <Stack direction={'row'} gap={'4'}>
             <StoreEvent/>
             <StoreEvent/>
           </Stack>

@@ -1,14 +1,9 @@
 import {
-  Box,
   Button,
   Checkbox,
   Container,
-  FormControl,
-  FormLabel,
   Img,
   Input,
-  InputGroup,
-  InputRightElement,
   Link,
   ListItem,
   Stack,
@@ -34,12 +29,7 @@ import {
 } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  loadUser,
-  updateColor,
-  updateUser,
-} from '../../../reducers/useReducers.js';
-import { baseUrl } from '../../../utilities/Config.js';
+import { loadUser, updateUser } from '../../../reducers/useReducers.js';
 
 export default function Index() {
   const user = useSelector(state => state.value);
@@ -48,14 +38,12 @@ export default function Index() {
   const navigate = useNavigate();
   const [remember, setRemember] = useState(false);
 
-  const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
-
   useEffect(() => {
     HeadFootEnabler(location);
   }, [location]);
 
   const signupstyle = {
+    w: '48%',
     outline: '1px solid #fff',
     py: '25px',
     bg: '#271623b5',
@@ -91,19 +79,18 @@ export default function Index() {
       formData.append('username', Fields.username);
       formData.append('password', Fields.password);
 
-      var response = await POST(`users/login`, formData);
+      var response = await POST('/users/login', formData);
+
+      console.log(response);
 
       if (response.status === 'success') {
         if (remember) {
           localStorage.setItem('userCreds', JSON.stringify(Fields));
         }
-        dispatch(loadUser(response.data));
-        if (response.data.barDetails) {
-          dispatch(updateColor(response.data.barDetails.color));
-        }
-        //
-        localStorage.setItem('user', JSON.stringify(response.data));
       }
+
+      dispatch(loadUser(response.data));
+      localStorage.setItem('user', JSON.stringify(response.data));
 
       toast({
         description: response.message,
@@ -113,15 +100,14 @@ export default function Index() {
         duration: 2500,
       });
 
-      // setFields({
-      //   username: '',
-      //   password: '',
-      // });
+      setFields({
+        username: '',
+        password: '',
+      });
 
       setisLoading(false);
     } catch (err) {
       console.log(err);
-      debugger;
       toast({
         description: 'Something went wrong!',
         status: 'error',
@@ -152,6 +138,7 @@ export default function Index() {
 
   useEffect(() => {
     let creds = localStorage.getItem('userCreds');
+    console.log(creds);
     if (creds) {
       setFields(JSON.parse(creds));
     } else {
@@ -161,18 +148,7 @@ export default function Index() {
       });
     }
 
-    if (user === undefined || user === null) {
-      navigate('/dashboard/login');
-    } else if (user.membership === null) {
-      navigate('/dashboard/Plan');
-      SetAccessToken(user.verificationToken);
-      console.log('usermembership=>', user.membership);
-      console.log('user=>', user);
-    } else {
-      navigate('/dashboard');
-      console.log(user.verificationToken);
-      SetAccessToken(user.verificationToken);
-    }
+    
   }, [user]);
 
   return (
@@ -194,13 +170,11 @@ export default function Index() {
             spacing={'0'}
             direction={'row'}
             gap={'6'}
-            px={{ base: 'none', lg: '28px' }}
             justifyContent={'space-between'}
           >
             <Input
               sx={signupstyle}
-              width={{ base: '100%', lg: '48%' }}
-              placeholder={'Email Address'}
+              placeholder={'username'}
               type="email"
               _placeholder={{ color: '#fff' }}
               value={Fields?.username}
@@ -210,11 +184,11 @@ export default function Index() {
                   username: e.target.value,
                 });
               }}
+              // setFields={username => setFields({ ...Fields, username })}
             />
             <Input
               sx={signupstyle}
               placeholder={'Password'}
-              width={{ base: '100%', lg: '48%' }}
               type="password"
               _placeholder={{ color: '#fff' }}
               value={Fields?.password}
@@ -225,72 +199,39 @@ export default function Index() {
                 });
               }}
             />
-            <Box display={"flex"} width={"100%"} justifyContent={{base:"center",lg:"space"}} flexDirection={{base:"column",lg:"row"}  }>
-              <Checkbox
-                color={'#fff'}
-                colorScheme="green"
-                onChange={e => setRemember(e.target.checked)}
-                defaultValue={remember}
-              >
-                Remember Password
-              </Checkbox>
-              <Link
-                w={{base:"100%",lg:"48%"}}
-                color={'#fff'}
-                as={ReactLink}
-                to={'/dashboard/forgetPassword'}
-              >
-                Forgot Password?
-              </Link>
-            </Box>
+
+            <Checkbox
+              color={'#fff'}
+              colorScheme="green"
+              onChange={e => setRemember(e.target.checked)}
+              defaultValue={remember}
+            >
+              Remember Password
+            </Checkbox>
+            <Link w={'48%'} color={'#fff'} as={ReactLink} to={'/dashboard/forgot'}>
+              Forgot Password?
+            </Link>
           </Stack>
           <Stack mb={'12'}>
-            <Box mb={'4'} textAlign={'center'}>
-              <Button
-                onClick={() => submitForm()}
-                bgColor={'#dc0b9b'}
-                w={{base:"100%",lg:"48%"}}
-                color={'#fff'}
-                borderRadius={6}
-                fontWeight={'600'}
-                margin={'auto'}
-                py={6}
-                px={'12'}
-                fontSize={'17px'}
-                border={'2px solid #fff'}
-                borderColor={'#dc0b9b'}
-                _hover={{
-                  bgColor: 'transparent',
-                  color: '#fff',
-                }}
-                isLoading={isLoading}
-              >
-                Login
-              </Button>
-            </Box>
-            <Box textAlign={'center'}>
-              <Button
-                as={ReactLink}
-                to={'/dashboard/signup'}
-                bgColor={'transparent'}
-                w={{base:"100%",lg:"48%"}}     
-                color={'#fff'}
-                borderRadius={6}
-                fontWeight={'600'}
-                margin={'auto'}
-                py={6}
-                px={'12'}
-                fontSize={'17px'}
-                border={'2px solid #fff'}
-                borderColor={'#dc0b9b'}
-                _hover={{
-                  bgColor: 'transparent',
-                  color: '#fff',
-                }}
-              >
-                SignUp
-              </Button>
-            </Box>
+            <Button
+              onClick={() => submitForm()}
+              bgColor={'#dc0b9b'}
+              color={'#fff'}
+              borderRadius={6}
+              fontWeight={'600'}
+              px={'50px'}
+              py={6}
+              fontSize={'17px'}
+              border={'2px solid #fff'}
+              borderColor={'#dc0b9b'}
+              _hover={{
+                bgColor: 'transparent',
+                color: '#fff',
+              }}
+              isLoading={isLoading}
+            >
+              Submit
+            </Button>
           </Stack>
           <Stack>
             <CustomPara textAlign={'center'}>Or continue with</CustomPara>

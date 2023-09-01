@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   Container,
-  Divider,
   FormControl,
   FormLabel,
   Img,
@@ -11,7 +10,6 @@ import {
   Link,
   ListItem,
   Stack,
-  Text,
   UnorderedList,
   useToast,
 } from '@chakra-ui/react';
@@ -43,9 +41,12 @@ export default function Index() {
     HeadFootEnabler(location);
   }, [location]);
 
+  
+
   // console.log(baseUrl);
 
   const signupstyle = {
+    w: '48%',
     outline: '1px solid #fff',
     py: '25px',
     bg: '#271623b5',
@@ -59,7 +60,8 @@ export default function Index() {
     email: '',
     password: '',
     confirm_password: '',
-    role: 'bouncer',
+    role : "bouncer"
+
   });
 
   const [agreement, setagreement] = useState(false);
@@ -74,7 +76,9 @@ export default function Index() {
         Fields.email === '' ||
         Fields.password === '' ||
         Fields.confirm_password === ''
+        
       ) {
+        
         toast({
           status: 'error',
           title: 'Please fill in all the fields to proceed further.',
@@ -86,7 +90,8 @@ export default function Index() {
         return;
       }
 
-      if (agreement === false) {
+      if(agreement === false)
+      {
         toast({
           status: 'error',
           title: 'Please agree to term and condition for proceed further.',
@@ -96,49 +101,17 @@ export default function Index() {
         });
         setisLoading(false);
         return;
-      }
 
-      Fields.role = 'bouncer';
+      }
+      
+      Fields.role = "bouncer";
 
       let data = Fields;
+      
+     let response = await POST(`${baseUrl}users`,Fields )
 
-      if (Fields.username !== Fields.username.toLowerCase()) {
-        toast({
-          description: 'User name should be in lower case',
-          status:"error",
-          isClosable: true,
-          position: 'bottom-left',
-          duration: 2500,
-        });
-        setisLoading(false);
-        return;
-      }
-      if(Fields.password !==Fields.confirm_password){
-        toast({
-          description: "Password and Confirm Password doesn't match",
-          status: "error",
-          isClosable: true,
-          position: 'bottom-left',
-          duration: 2500,
-        });
-        setisLoading(false);
-        return;
-      }
-
-      let response = await POST(`users`, Fields);
-
-      if(response.status!=="success"){
-        toast({
-          description: response.message,
-          status: response.status,
-          isClosable: true,
-          position: 'bottom-left',
-          duration: 2500,
-        });
-        setisLoading(false);
-        return;
-      }
-      navigate('/dashboard/login');
+     
+   
 
       toast({
         description: response.message,
@@ -147,22 +120,23 @@ export default function Index() {
         position: 'bottom-left',
         duration: 2500,
       });
+
+      setFields({
+        username: '',
+        email: '',
+        password: '',
+        confirm_password: ''
+      });
       
-
-      // setFields({
-      //   username: '',
-      //   email: '',
-      //   password: '',
-      //   confirm_password: ''
-      // });
-
-      // setagreement(false);
+      setagreement(false);
       setisLoading(false);
+      navigate('/dashboard/login');
+
     } catch (err) {
       toast({
         description: 'Something went wrong!',
         status: 'error',
-        isClosable: true,
+        isClosable: true, 
         position: 'bottom-left',
         duration: 2500,
       });
@@ -187,6 +161,7 @@ export default function Index() {
     color: 'dashbg.100',
   };
 
+
   return (
     <>
       <Stack
@@ -197,14 +172,13 @@ export default function Index() {
         <Container maxW={'6xl'}>
           <Stack mb={'12'}>
             <Img margin={'auto'} mb={'4'} w={'150px'} src={logo} />
-            <CustomHeading fontSize={{base:"25px",lg:"40px"}} color={'#fff'}>
+            <CustomHeading color={'#fff'}>
               Welcome to Night District
             </CustomHeading>
             <CustomPara textAlign={'center'}>Enter your details</CustomPara>
           </Stack>
           <Stack
             mb={'8'}
-            px={{base:"none",lg:"12px"}}
             flexWrap={'wrap'}
             spacing={'0'}
             direction={'row'}
@@ -263,13 +237,10 @@ export default function Index() {
                 });
               }}
             />
-            <Checkbox
-              color={'#fff'}
-              colorScheme="green"
+            <Checkbox  color={'#fff'} colorScheme="green"
               isChecked={agreement}
-              onChange={e => {
-                setagreement(e.target.checked);
-              }}
+              onChange={(e) => { setagreement(e.target.checked) }}
+
             >
               I agree to the{' '}
               <Link sx={lnk} as={ReactLink} to={'./'}>
@@ -277,25 +248,20 @@ export default function Index() {
               </Link>{' '}
               &{' '}
               <Link sx={lnk} as={ReactLink} to={'./'}>
-                Privacy Policy
+                Privacy Policy{' '}
               </Link>
               of Night District.
             </Checkbox>
-            <Box>
-              <Text>dcd</Text>
-            </Box>
           </Stack>
           <Stack mb={'12'}>
             <Button
               onClick={() => submitForm()}
               bgColor={'#dc0b9b'}
-              w={"100%"}
               color={'#fff'}
               borderRadius={6}
               fontWeight={'600'}
-              margin={'auto'}
+              px={'50px'}
               py={6}
-              px={'12'}
               fontSize={'17px'}
               border={'2px solid #fff'}
               borderColor={'#dc0b9b'}
@@ -308,23 +274,8 @@ export default function Index() {
               Submit
             </Button>
           </Stack>
-          <Stack textAlign={'center'} mb={'4'}>
-            <Text color={'#fff'}>
-              Already A Member?{' '}
-              <Link as={ReactLink} to={'/dashboard/login'}>
-                Login
-              </Link>
-            </Text>
-          </Stack>
           <Stack>
-            <Stack mb={'6'} alignItems={'center'} direction={'row'}>
-              <Divider />
-              <Text textAlign={'center'} w={'400px'} color={'#fff'}>
-                Or continue with
-              </Text>
-              <Divider />
-            </Stack>
-
+            <CustomPara textAlign={'center'}>Or continue with</CustomPara>
             <UnorderedList
               justifyContent={'center'}
               listStyleType={'none'}

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { baseUrl } from './Config';
 let accessToken = '';
 
 export function SetAccessToken(t) {
@@ -8,7 +7,7 @@ export function SetAccessToken(t) {
 
 export const POST = async (url, data = {}, headers = {}) => {
   try {
-    const res = await axios.post(baseUrl + url, data, {
+    const res = await axios.post(url, data, {
       headers: {
         ...headers,
       },
@@ -26,7 +25,7 @@ export const POST = async (url, data = {}, headers = {}) => {
 
 export const PUT = async (url, data = {}, headers = {}) => {
   try {
-    const res = await axios.put(baseUrl + url, data, {
+    const res = await axios.put(url, data, {
       headers: {
         ...headers,
       },
@@ -44,7 +43,7 @@ export const PUT = async (url, data = {}, headers = {}) => {
 
 export const GET = async (url, headers = {}) => {
   try {
-    const res = await axios.get(baseUrl + url, {
+    const res = await axios.get(url, {
       headers: {
         ...headers,
       },
@@ -62,7 +61,7 @@ export const GET = async (url, headers = {}) => {
 
 export const DELETE = async (url, headers = {}) => {
   try {
-    const res = await axios.delete(baseUrl + url, {
+    const res = await axios.delete(url, {
       headers: {
         ...headers,
       },

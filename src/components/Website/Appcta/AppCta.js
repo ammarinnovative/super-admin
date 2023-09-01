@@ -10,10 +10,10 @@ import { Link as ReactLink } from 'react-router-dom';
 export default function AppCta() {
   return (
     <>
-      <Stack bg={'#dc0b9b'}  py={32} mt={'0 !important'} position={'relative'}>
-        <Container maxW={'6xl'}  p={{ base: '15px !important', '2xl': 0 }}>
-          <Stack direction={{base:"column",lg:"row"}} alignItems={'center'}>
-            <Box w={{base:"90%",lg:"50%"}}>
+      <Stack bg={'#dc0b9b'} py={32} mt={'0 !important'} position={'relative'}>
+        <Container maxW={'6xl'} p={{ base: '15px !important', '2xl': 0 }}>
+          <Stack direction={'row'} alignItems={'center'}>
+            <Box w={'50%'}>
               <CustomHeading color={'#fff'} textAlign={'left'}>
                 Party Different with Night District
               </CustomHeading>
@@ -29,7 +29,7 @@ export default function AppCta() {
               </Stack>
             </Box>
             <Box w={'50%'}>
-              <Image display={{base:"none",lg:"block"}} top={'-16%'} position={'absolute'} src={AppMobile} />
+              <Image top={'-16%'} position={'absolute'} src={AppMobile} />
             </Box>
           </Stack>
         </Container>

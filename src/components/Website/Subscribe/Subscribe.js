@@ -9,9 +9,9 @@ import BorderButton from '../Buttons/BorderButton';
 export default function Subscribe() {
   return (
     <>
-      <Stack direction={{base:"column",lg:"row"}} mt={'0 !important'}>
-        <Box w={{base:"100%",lg:"50%"}} bg={'#000'} py={32}>
-          <Box textAlign={'center'} w={{base:"100%",lg:"575px"}} marginLeft={'auto'}>
+      <Stack direction={'row'} mt={'0 !important'}>
+        <Box w={'50%'} bg={'#000'} py={32}>
+          <Box textAlign={'center'} w={'575px'} marginLeft={'auto'}>
             <CustomHeading
               color={'#fff'}
               fontSize={'30px'}
@@ -28,14 +28,14 @@ export default function Subscribe() {
           </Box>
         </Box>
         <Box
-          w={{base:"100%",lg:"50%"}}
+          w={'50%'}
           bgSize={'cover'}
           bgRepeat={'no-repeat'}
           backgroundImage={Sub}
           marginLeft={'0 !important'}
           py={32}
         >
-          <Box w={{base:"100%",lg:"575px"}} marginRight={'auto'}>
+          <Box w={'575px'} marginRight={'auto'}>
             <CustomHeading
               color={'#fff'}
               fontSize={'30px'}

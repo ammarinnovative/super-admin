@@ -7,8 +7,8 @@ import CustomPara from '../Paragraph/CustomPara';
 export default function StoreEvent() {
   return (
     <>
-      <Box w={{base:"90%",lg:"280px"}} bg={'#1b191b'} p={'5'} borderRadius={'8'}>
-        <Image src={Se1} width={"100%"} mb={'5'}/>
+      <Box w={'280px'} bg={'#1b191b'} p={'5'} borderRadius={'8'}>
+        <Image src={Se1} mb={'5'}/>
         <CustomHeading textAlign={'left'} color={'#fff'} fontSize={'20px'}>
           Tito’s Handmade Vodka
         </CustomHeading>

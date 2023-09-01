@@ -20,7 +20,7 @@ export default function About() {
       >
         <Container maxW={'6xl'} p={{ base: '15px !important', '2xl': 0 }}>
           <Stack textAlign={'center'} mb={20}>
-            <CustomHeading color={'wcolor.100'}>About Night District</CustomHeading>
+            <CustomHeading>About Night District</CustomHeading>
             <CustomPara textAlign={'center'}>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
               eiusmod tempor incididunt ut labore et dolore

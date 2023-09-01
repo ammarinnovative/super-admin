@@ -3,19 +3,14 @@ import Signupimg from '../../../assets/images/Banner/signup.jpg';
 import logo from '../../../assets/images/Banner/signlogo.png';
 import React from 'react';
 import { HeadFootEnabler } from '../../../utilities/HeadFootEnabler';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import CustomHeading from '../../../components/Website/Headings/CustomHeading';
 import CustomPara from '../../../components/Website/Paragraph/CustomPara';
 import { Icon } from '@chakra-ui/icons';
 import { GET, POST } from '../../../utilities/ApiProvider';
 import { AiOutlineSearch, AiOutlinePlusCircle } from 'react-icons/ai';
-import { Link as ReactLink } from 'react-router-dom';
 import { useState } from 'react';
-import moment from 'moment';
-import { baseUrl } from '../../../utilities/Config';
-import Startermenu from '../../../components/Dashboard/Headers/Startermenu';
-import { useSelector } from 'react-redux';
 
 export default function Addevents() {
 
@@ -24,8 +19,6 @@ export default function Addevents() {
     const [Hashtags, setHashtags] = useState([]);
     const [hashtagData, sethashtagData] = useState([]);
     const toast = useToast();
-    const [dj, setDj] = useState([]);
-
     const [isLoading, setisLoading] = useState(false);
 
     const location = useLocation();
@@ -35,39 +28,19 @@ export default function Addevents() {
     }, [location]);
 
 
-  const navigate = useNavigate();
-
- 
-  const user = useSelector(state=>state?.value);
-  useEffect(() => {
-    if(!user){
-      navigate("/dashboard/login");
-    }
-  }, [user]);
-
 
     useEffect(() => {
-
         getHastags();
         getPosts();
-        getDJ();
       }, []);
     
       const getPosts = async () => {
-        var response = await GET('post');
+        var response = await GET('/post');
         setPost(response.data);
       };
       const getHastags = async () => {
-        
-        var response = await GET('admin/hashtag');
+        var response = await GET('/admin/hashtag');
         setHashtags(response.data);
-      };
-
-      const getDJ = async () => {
-        var response = await GET('users/type/dj');
-    
-        
-        setDj(response.data);
       };
     
       const [Fields, setFields] = useState({
@@ -78,42 +51,39 @@ export default function Addevents() {
         try {
           const formData = new FormData();
     
+          if (Fields.title === '' && Fields.description === '') {
+            toast({
+              status: 'error',
+              title: 'Please fill in all the fields to proceed further.',
+              duration: 7000,
+              isClosable: true,
+              position: 'bottom-left',
+            });
+            return;
+          }
     
-          formData.append('name', Fields.name);
+          formData.append('title', Fields.heading);
           formData.append('description', Fields.description);
-          formData.append('dj', Fields.dj);
-          formData.append('price', Fields.price);
-          formData.append('repeat', Fields.repeat);
-          formData.append('stock', Fields.stock);
-          formData.append('venue', Fields.venue);
-          var momentObj = moment(Fields.date + Fields.time, 'YYYY-MM-DDLT');
+          formData.append('hastags', hashtagData);
     
-          // conversion
-          var dateTime = momentObj.format('YYYY-MM-DDThh:mm:ssZ');
-    
-          formData.append('date', dateTime);
-    
-    
-    
-          var response = await POST('event', formData);
-    
-    
-       
+          var response = await POST('/post', formData);
     
           toast({
             description: response.message,
-            status: "success",
+            status: response.status,
             isClosable: true,
             position: 'bottom-left',
             duration: 2500,
           });
-          
     
-      
+          setFields({
+            username: '',
+            password: '',
+          });
+    
           setisLoading(false);
         } catch (err) {
-         
-          debugger;
+          console.log(err);
           toast({
             description: 'Something went wrong!',
             status: 'error',
@@ -135,19 +105,14 @@ export default function Addevents() {
 
   return (
     <>
-  
       <Stack
         backgroundRepeat={'no-repeat'}
         backgroundSize={'cover'}
         backgroundImage={Signupimg}
         py={'32'}
       >
-        <Container maxW={'full'} px={'14'}>
-        <Stack direction={'row'} gap={'8'}>
-        <Stack w={'350px'}>
-              <Startermenu />
-            </Stack>
-            <Stack w={'70%'} gap={'8'}>
+        <Container maxW={'6xl'}>
+          <Stack>
           <Stack>
               <Img margin={'auto'} mb={'4'} w={'150px'} src={logo} />
               <CustomHeading color={'#fff'}>Add Your Events</CustomHeading>
@@ -179,7 +144,7 @@ export default function Addevents() {
                     onChange={e => {
                       setFields({
                         ...Fields,
-                        picture : e.target.value,
+                        upload_document: e.target.value,
                       });
                     }}
                   />
@@ -190,12 +155,6 @@ export default function Addevents() {
                   type="Name"
                   _placeholder={{ color: '#fff' }}
                   value={Fields.title}
-                  onChange={e => {
-                    setFields({
-                      ...Fields,
-                      name: e.target.value,
-                    });
-                  }}
                 />
                 <Textarea
                   sx={signupstyle}
@@ -206,7 +165,7 @@ export default function Addevents() {
                   onChange={e => {
                     setFields({
                       ...Fields,
-                      description: e.target.value,
+                      discrpition: e.target.value,
                     });
                   }}
                 ></Textarea>
@@ -225,6 +184,7 @@ export default function Addevents() {
                       Date
                     </FormLabel>
                     <Input
+                    sx={signupstyle}
                       type={'date'}
                       bg={'#212121'}
                       pt={'7'}
@@ -232,12 +192,6 @@ export default function Addevents() {
                       w={'full'}
                       color={'#fff'}
                       outline={'1px solid #fff'}
-                      onChange={e => {
-                        setFields({
-                          ...Fields,
-                          date: e.target.value,
-                        });
-                      }}
                     />
                   </Box>
                   <Box w={'full'} position={'relative'}>
@@ -250,6 +204,7 @@ export default function Addevents() {
                       Time
                     </FormLabel>
                     <Input
+                    sx={signupstyle}
                       type={'time'}
                       bg={'#212121'}
                       pt={'7'}
@@ -257,12 +212,6 @@ export default function Addevents() {
                       w={'full'}
                       color={'#fff'}
                       outline={'1px solid #fff'}
-                      onChange={e => {
-                        setFields({
-                          ...Fields,
-                          time: e.target.value,
-                        });
-                      }}
                     />
                   </Box>
                 </Stack>
@@ -274,7 +223,8 @@ export default function Addevents() {
                 >
                   <Box w={'full'} position={'relative'}>
                     <Input
-                      type={'number'}
+                    sx={signupstyle}
+                      type={'text'}
                       bg={'#212121'}
                       pt={'7'}
                       pb={'6'}
@@ -282,38 +232,21 @@ export default function Addevents() {
                       color={'#fff'}
                       outline={'1px solid #fff'}
                       placeholder={'Price'}
-                      onChange={e => {
-                        setFields({
-                          ...Fields,
-                          price: e.target.value,
-                        });
-                      }}
                     />
                   </Box>
                   <Box w={'full'} position={'relative'}>
                     <Select
+                       
+                   
                       size="lg"
                       color={'#fff'}
                       outline={'1px solid #fff'}
                       placeholder="Select option"
-                      onChange={e => {
-                        setFields({
-                          ...Fields,
-                          dj: e.target.value,
-                        });
-                      }}
                     >
-                     
-                      { dj?.length > 0 && dj?.map(e => {
-                      
-                        
-                    return (
-                      <option value={e._id}>{e.username}</option>
-                    );
-                  })}    
-                      
-                      
-                  </Select>
+                      <option value="option1">Option 1</option>
+                      <option value="option2">Option 2</option>
+                      <option value="option3">Option 3</option>
+                    </Select>
                   </Box>
                 </Stack>
 
@@ -358,9 +291,7 @@ export default function Addevents() {
                   flexWrap={'wrap'}
                   color={'#fff'}
                 >
-                  {
-                  Hashtags?.length > 0 &&
-                  Hashtags?.map(e => {
+                  {Hashtags.map(e => {
                     return (
                       <Checkbox
                         border={'1px solid #fff'}
@@ -398,12 +329,7 @@ export default function Addevents() {
                 >
                   <Box w={'full'} position={'relative'}>
                     <FormControl display="flex" alignItems="center">
-                      <Switch id="email-alerts" colorScheme="pink" onChange={e => {
-                       setFields({
-                          ...Fields,
-                          repeat: Fields.repeat?true:false,
-                        });
-                      }} value={Fields.repeat} />
+                      <Switch id="email-alerts" colorScheme="pink" />
                       <FormLabel
                         ml={'2'}
                         color={'#fff'}
@@ -419,49 +345,15 @@ export default function Addevents() {
                       size="md"
                       color={'#fff'}
                       outline={'1px solid #fff'}
-                      onChange={e => {
-                        setFields({
-                          ...Fields,
-                          stock: e.target.value,
-                        });
-                      }}
+                      placeholder="Select option"
                     >
-                      <option value="500">unlimited</option>
-                      <option value='50 '>50</option>
-                      <option value='500'>500</option>
-                      
+                      <option value="option1">Option 1</option>
+                      <option value="option2">Option 2</option>
+                      <option value="option3">Option 3</option>
                     </Select>
                   </Box>
-                  
                 </Stack>
               </Stack>
-              <Button onClick={() => submitForm()}  bg={'pHeading.100'} color={'#fff'} px={'14'}>
-                  Post
-                </Button>
-          </Stack>
-          <Stack w={'350px'}>
-          <Button
-             as={ReactLink} to={'/dashboard'}
-              bgColor={'transparent'}
-              w={{base : 'fit-content', '2xl' : '150px' }}
-              color={'#fff'}
-              borderRadius={6}
-              fontWeight={'600'}
-             margin={'0 auto'}
-              py={6}
-              px={'12'}
-              fontSize={'17px'}
-              border={'2px solid #fff'}
-              borderColor={'#dc0b9b'}
-              _hover={{
-                bgColor: 'transparent',
-                color: '#fff',
-              }}
-             
-            >
-             Skip
-            </Button>
-          </Stack>
           </Stack>
         </Container>
       </Stack>

@@ -9,7 +9,7 @@ export default function StoreDetails() {
   return (
     <>
       <Stack>
-        <Stack direction={{base:"column",lg:"row"}} alignItems={'center'} gap={'3'}>
+        <Stack direction={'row'} alignItems={'center'} gap={'3'}>
           <Box>
             <Image borderRadius={'50%'} src={Storepic} />
           </Box>
@@ -21,10 +21,10 @@ export default function StoreDetails() {
           </Box>
         </Stack>
         <Stack>
-          <CustomHeading textAlign={{base:"center",md:"left"}} mb={'0'} fontSize={'35px'}>
+          <CustomHeading textAlign={'left'} mb={'0'} fontSize={'35px'}>
             About the Night Club
           </CustomHeading>
-          <CustomPara textAlign={{base:"center",lg:"left"}} marginBottom={'15px !important'}>
+          <CustomPara marginBottom={'15px !important'}>
             Duis aute irure dolor in reprehenderit in voluptate velit esse
             cillum dolore eu fugiat nulla pariatur.
             <br />

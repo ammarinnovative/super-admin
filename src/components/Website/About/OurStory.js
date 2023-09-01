@@ -20,7 +20,7 @@ export default function OurStory() {
       >
         <Container maxW={'6xl'} p={{ base: '15px !important', '2xl': 0 }}>
           <Stack textAlign={'center'} mb={20}>
-            <CustomHeading  color={'wcolor.100'}>Our Story</CustomHeading>
+            <CustomHeading>Our Story</CustomHeading>
             <CustomPara textAlign={'center'} fontSize={'17px'}>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -38,7 +38,7 @@ export default function OurStory() {
             </CustomPara>
           </Stack>
           <Stack textAlign={'center'} mb={20}>
-            <CustomHeading  color={'wcolor.100'}>About Us</CustomHeading>
+            <CustomHeading>About Us</CustomHeading>
             <CustomPara fontSize={'17px'} textAlign={'center'}>
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa

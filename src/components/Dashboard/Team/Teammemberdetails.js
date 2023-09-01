@@ -24,21 +24,21 @@ export default function Teammemberdetails(members) {
                 justifyContent={'space-between'}
               >
                 <Box gap={'8'} alignItems={'center'} display={'flex'}>
-                  {members.members.user.profile_picture ?  members.members.user.profile_picture :  ( <Image borderRadius={'50%'} w={'100px'} src={Teamone} />) }
-                 
+                  <Image borderRadius={'50%'} w={'100px'} src={Teamone} />
                   <Box>
                     <CustomPara
                       fontWeight={'900'}
                       marginBottom={0}
                       color={'brand.800'}
                     >
+                      {members.name}
                     </CustomPara>
                     <CustomHeading
                       textAlign={'left'}
                       color={'#fff'}
                       fontSize={'15px'}
                     >
-                      {members.members.user.username}
+                      Hasan Saleem
                     </CustomHeading>
                   </Box>
                 </Box>
@@ -71,7 +71,7 @@ export default function Teammemberdetails(members) {
                     color={'#fff'}
                     fontSize={'15px'}
                   >
-                    ${members.members.user.todaytip}
+                    $15.00
                   </CustomHeading>
                 </Box>
                 <Box>
@@ -87,7 +87,7 @@ export default function Teammemberdetails(members) {
                     color={'#fff'}
                     fontSize={'15px'}
                   >
-                    ${members.members.user.todaytipEarned}
+                    $45.00
                   </CustomHeading>
                 </Box>
                 <Box>
@@ -103,7 +103,7 @@ export default function Teammemberdetails(members) {
                     color={'#fff'}
                     fontSize={'15px'}
                   >
-                    ${members.members.user.amountWithdraw}
+                    $0.00
                   </CustomHeading>
                 </Box>
 

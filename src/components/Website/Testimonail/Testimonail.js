@@ -30,24 +30,24 @@ export default function Testimonail() {
                 nisi ut aliquip ex ea commodo consequat.
               </CustomPara>
             </Box>
-            <Stack direction={{base:"column",md:"row",lg:"row"}} gap={'6'}>
-              <Box bg={'#1d1d1d'} borderRadius={'12'} py={'10'} px={{base:"2",lg:"12"}}>
+            <Stack direction={'row'} gap={'6'}>
+              <Box bg={'#1d1d1d'} borderRadius={'12'} py={'10'} px={'12'}>
                 <Flex mb={'6'} gap={'3'} alignItems={'center'}>
                   <Box>
                     <Image borderRadius={'50%'} src={profile} />
                   </Box>
                   <Box>
-                    <CustomHeading  color={'wcolor.100'} fontSize={'25px'} mb={'0'}>
+                    <CustomHeading fontSize={'25px'} mb={'0'}>
                       Maira Flynn
                     </CustomHeading>
                     <CustomPara fontSize={'14px'}>CEO of Bata</CustomPara>
                   </Box>
                 </Flex>
                 <Flex gap={'3'} >
-                  <Box display={{base:"none",md:"block"}} w={'20%'}>
-                    <Image  src={Qta} />
+                  <Box w={'20%'}>
+                    <Image src={Qta} />
                   </Box>
-                  <Box w={{base:"100%",md:"80%"}}>
+                  <Box w={'80%'}>
                     <CustomPara fontSize={'15px'}>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -68,17 +68,17 @@ export default function Testimonail() {
                     <Image borderRadius={'50%'} src={profile} />
                   </Box>
                   <Box>
-                    <CustomHeading  color={'wcolor.100'} fontSize={'25px'} mb={'0'}>
+                    <CustomHeading fontSize={'25px'} mb={'0'}>
                       Maira Flynn
                     </CustomHeading>
                     <CustomPara fontSize={'14px'}>CEO of Bata</CustomPara>
                   </Box>
                 </Flex>
                 <Flex gap={'3'} >
-                  <Box display={{base:"none",md:"block"}} w={'20%'} w={'20%'}>
+                  <Box w={'20%'}>
                     <Image src={Qta} />
                   </Box>
-                  <Box w={{base:"100%",md:"80%"}}>
+                  <Box w={'80%'}>
                     <CustomPara fontSize={'15px'}>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna

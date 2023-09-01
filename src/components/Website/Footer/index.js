@@ -23,7 +23,7 @@ export default function Index() {
         <Container maxW={'6xl'} p={{ base: '15px !important', '2xl': 0 }}>
           <Stack textAlign={'center'}>
             <Image src={logo} w={'120px'} m={'auto'} mb={'10'}  />
-            <UnorderedList mb={'10 !important'} listStyleType={'none'} gap={'6'} flexDirection={{base:"column",lg:"row"}} display={'flex'} justifyContent={{base:"left",lg:"center"}}>
+            <UnorderedList mb={'10 !important'} listStyleType={'none'} gap={'6'} display={'flex'} justifyContent={'center'}>
             {NAV_ITEMS?.map((navItem) => (
               <ListItem>  
                  <Link

@@ -12,7 +12,7 @@ import {
   Input,
   useToast,
 } from '@chakra-ui/react';
-import { Link as ReactLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as ReactLink, useLocation } from 'react-router-dom';
 import CustomHeading from '../../../components/Website/Headings/CustomHeading';
 import { useEffect } from 'react';
 import Signupimg from '../../../assets/images/Banner/signup.jpg';
@@ -26,21 +26,14 @@ import { useSelector } from 'react-redux';
 
 export default function Index() {
   const location = useLocation();
-
+  const user = useSelector(state => state?.value);
 
   useEffect(() => {
     HeadFootEnabler(location);
   }, [location]);
-  const [localItem, setLocalItem] = useState(false);
-
-  const navigate = useNavigate();
-  const user = useSelector(state=>state?.value);
   useEffect(() => {
-    if(!user){
-      navigate("/dashboard/login");
-    }
+    console.log(user);
   }, [user]);
-
 
   const tblist = {
     color: '#fff',
@@ -89,9 +82,9 @@ export default function Index() {
         setisLoading(false);
         return;
       }
-      console.log(user)
+
       let response = await PUT(
-        `bar/barInfo/${user?.barInfo}`,
+        `${baseUrl}bar/barInfo/${user?.barinfo}`,
         Fields,
         { authorization: `Bearer ${user?.verificationToken}` }
       );
@@ -104,8 +97,15 @@ export default function Index() {
         duration: 2500,
       });
 
-      // 
-
+      setFields({
+        barName: '',
+        address: '',
+        city: '',
+        state: '',
+        phone: '',
+        url: '',
+        upload_document: '',
+      });
 
       setisLoading(false);
     } catch (err) {
@@ -125,7 +125,6 @@ export default function Index() {
 
   return (
     <>
-    
       <Stack
         backgroundRepeat={'no-repeat'}
         backgroundSize={'cover'}
@@ -150,7 +149,7 @@ export default function Index() {
                 flexWrap={'wrap'}
                 spacing={'0'}
                 direction={'row'}
-                gap={'4'}
+                gap={'6'}
                 justifyContent={'space-between'}
               >
                 <Input
@@ -184,8 +183,7 @@ export default function Index() {
                   placeholder={'*City'}
                   type="text"
                   _placeholder={{ color: '#fff' }}
-                  value={Fields.city
-                  }
+                  value={Fields.city}
                   onChange={e => {
                     setFields({
                       ...Fields,
@@ -211,8 +209,7 @@ export default function Index() {
                   placeholder={'Phone No.'}
                   type="text"
                   _placeholder={{ color: '#fff' }}
-                  value={Fields
-                    .phone}
+                  value={Fields.phone}
                   onChange={e => {
                     setFields({
                       ...Fields,
@@ -297,33 +294,10 @@ export default function Index() {
                 </Button>
               </Stack>
             </Stack>
-            <Stack w={'350px'}>
-            <Button
-             as={ReactLink} to={'/dashboard'}
-              bgColor={'transparent'}
-              w={{base : 'fit-content', '2xl' : '150px' }}
-              color={'#fff'}
-              borderRadius={6}
-              fontWeight={'600'}
-             margin={'0 auto'}
-              py={6}
-              px={'12'}
-              fontSize={'17px'}
-              border={'2px solid #fff'}
-              borderColor={'#dc0b9b'}
-              _hover={{
-                bgColor: 'transparent',
-                color: '#fff',
-              }}
-             
-            >
-             Skip
-            </Button>
-            </Stack>
+            <Stack w={'350px'}></Stack>
           </Stack>
         </Container>
       </Stack>
-     
     </>
   );
 }

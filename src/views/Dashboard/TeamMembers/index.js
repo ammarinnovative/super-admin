@@ -19,7 +19,7 @@ import {
   Textarea,
   Img,
   Select,
-  useToast,
+  useToast
 } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import BorderButton from '../../../components/Website/Buttons/BorderButton';
@@ -27,18 +27,19 @@ import CustomHeading from '../../../components/Website/Headings/CustomHeading';
 import MainDashboard from '../MainDashboard';
 import { AiOutlineCopy } from 'react-icons/ai';
 import profileimg from '../../../assets/images/other/profile.png';
-import { useEffect, useState } from 'react';
-import { POST, GET } from '../../../utilities/ApiProvider.js';
-import Team from '../../../components/Dashboard/Team/index';
+import { useEffect , useState } from 'react';
+import { POST , GET } from '../../../utilities/ApiProvider';
+import Team from '../../../components/Dashboard/Team/index'
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { AiOutlineSearch } from 'react-icons/ai';
 import CustomPara from '../../../components/Website/Paragraph/CustomPara';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 export default function TeamMember() {
+
+
   let bar = localStorage.getItem('user');
-  bar = JSON.parse(bar);
+  bar = JSON.parse(bar)
+
 
   const profileImageRef = useRef(null);
   const [images, setImages] = useState({});
@@ -46,18 +47,20 @@ export default function TeamMember() {
   const toast = useToast();
   const [isLoading, setisLoading] = useState(false);
 
-  const imageConverter = file => {
-    setImages(file);
+
+  
+  const imageConverter = (file) => {
+    setImages(file)
     setTheImage(URL.createObjectURL(new Blob(file)));
-  };
+  }
 
   const defaultSrc = profileimg;
-  // setup up state Variables
+ // setup up state Variables
 
   const [members, setMembers] = useState([]);
   const [roles, setRoles] = useState([]);
 
-  // get use from App Storage
+  // get use from App Storage 
 
   const OverlayOne = () => (
     <ModalOverlay
@@ -69,110 +72,107 @@ export default function TeamMember() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [overlay, setOverlay] = React.useState(<OverlayOne />);
 
-  // Add Use Effects
+    // Add Use Effects
 
-  useEffect(() => {
-    getEmployee();
-    getTeamMembers();
-  }, []);
+    useEffect(() => {
+      getEmployee()
+      getTeamMembers()
+    }, [])
 
-  const [localItem, setLocalItem] = useState(false);
-
-  const navigate = useNavigate();
-
-  const user = useSelector(state=>state?.value);
-  useEffect(() => {
-    if(!user){
-      navigate("/dashboard/login");
+    const [Fields, setFields] = useState({
+      upload_document: {},
+    });
+  
+    const getTeamMembers = async() =>
+    {
+      var response = await GET(`/teammember/${bar.barInfo}`);
+      setMembers(response.data)
     }
-  }, [user]);
+    // get Employeed
 
-  const [Fields, setFields] = useState({
-    upload_document: {},
-  });
+    const getEmployee = async() =>
+    {
+      var response = await GET(`/roles`);
+      setRoles(response.data)
 
-  const getTeamMembers = async () => {
-    var response = await GET(`teammember/${bar.barInfo}`);
-    setMembers(response.data);
-  };
-  // get Employeed
+    } 
 
-  const getEmployee = async () => {
-    var response = await GET(`roles`);
-    setRoles(response.data);
-  };
+    const submitForm = async () => {
+        try
+        {
+            setisLoading(true);
+            const formData = new FormData();
+            if (
+              Fields.name === '' &&
+              Fields.username === '' &&
+              Fields.password === '' &&
+              Fields.type === '' &&
+              Fields.type === ''
+            ) {
+              toast({
+                status: 'error',
+                title: 'Please fill in all the fields to proceed further.',
+                duration: 7000,
+                isClosable: true,
+                position: 'bottom-left',
+              });
+              setisLoading(false);
+              return;
+            }
+       
 
-  const submitForm = async () => {
-    try {
-      setisLoading(true);
-      const formData = new FormData();
-      if (
-        Fields.name === '' &&
-        Fields.username === '' &&
-        Fields.password === '' &&
-        Fields.type === '' &&
-        Fields.type === ''
-      ) {
-        toast({
-          status: 'error',
-          title: 'Please fill in all the fields to proceed further.',
-          duration: 7000,
-          isClosable: true,
-          position: 'bottom-left',
-        });
-        setisLoading(false);
-        return;
-      }
+     
+            formData.append('name', Fields.name);
+            formData.append('username', Fields.username);
+            formData.append('password', Fields.password);
+            formData.append('email', Fields.email);
+            formData.append('bar', bar.barInfo);
+            formData.append('type', Fields.type);
 
-      formData.append('name', Fields.name);
-      formData.append('username', Fields.username);
-      formData.append('password', Fields.password);
-      formData.append('email', Fields.email);
-      formData.append('bar', bar.barInfo);
-      formData.append('type', Fields.type);
+            let response = await POST('/teammember', formData, {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            });
+            toast({
+              description: response.message,
+              status: response.status,
+              isClosable: true,
+              position: 'bottom-left',
+              duration: 2500,
+            });
+      
+            setFields({
+              name: '',
+              city: '',
+              email: '',
+              phone: '',
+              message: '',
+            });
 
-      let response = await POST('teammember', formData, {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      });
-      toast({
-        description: response.message,
-        status: response.status,
-        isClosable: true,
-        position: 'bottom-left',
-        duration: 2500,
-      });
-
-      setFields({
-        name: '',
-        city: '',
-        email: '',
-        phone: '',
-        message: '',
-      });
-
-      setisLoading(false);
-    } catch (error) {
-      toast({
-        description: 'Something went wrong!',
-        status: 'error',
-        isClosable: true,
-        position: 'bottom-left',
-        duration: 2500,
-      });
+            setisLoading(false);
+        }
+        catch(error)
+        {
+          toast({
+            description: 'Something went wrong!',
+            status: 'error',
+            isClosable: true,
+            position: 'bottom-left',
+            duration: 2500,
+          });
+        }
     }
-  };
 
-  const signupstyle = {
-    outline: '1px solid #fff',
-    py: '25px',
-    bg: '#271623b5',
-    color: '#fff',
-  };
+    const signupstyle = {
+      outline: '1px solid #fff',
+      py: '25px',
+      bg: '#271623b5',
+      color: '#fff',
+    };
 
   return (
     <>
       <MainDashboard>
-        <Modal size={'3xl'} isCentered isOpen={isOpen} onClose={onClose}>
+      <Modal size={'3xl'} isCentered isOpen={isOpen} onClose={onClose}>
           {overlay}
           <ModalContent bg={'dashbg.100'}>
             <ModalHeader>
@@ -182,117 +182,113 @@ export default function TeamMember() {
             </ModalHeader>
             <ModalCloseButton color={'#fff'} />
             <ModalBody>
-              <Stack>
-                <Img
-                  cursor={'pointer'}
-                  w={'120px'}
-                  h={'120px'}
-                  objectFit={'cover'}
-                  m={'auto'}
-                  borderRadius={'50%'}
-                  src={theImage ?? defaultSrc}
-                  alt="preview"
-                />
-                <Input
-                  type={'file'}
-                  display={'none'}
-                  ref={profileImageRef}
-                  onChange={e => imageConverter(e.target.files)}
-                />
-                <Button
-                  bg={'transparent'}
-                  color={'#fff'}
-                  _hover={{
-                    bg: 'transparent',
-                    color: 'primaryText.200',
-                  }}
-                  onClick={() => profileImageRef?.current.click()}
-                >
-                  Upload Avatar
-                </Button>
-              </Stack>
-              <Stack gap={'4'}>
-                <Input
-                  sx={signupstyle}
-                  placeholder={'Name'}
-                  type="text"
-                  _placeholder={{ color: '#fff' }}
-                  value={Fields.name}
-                  onChange={e => {
-                    setFields({
-                      ...Fields,
-                      name: e.target.value,
-                    });
-                  }}
-                />
-                <Input
-                  sx={signupstyle}
-                  placeholder={'username'}
-                  type="username"
-                  _placeholder={{ color: '#fff' }}
-                  value={Fields.username}
-                  onChange={e => {
-                    setFields({
-                      ...Fields,
-                      username: e.target.value,
-                    });
-                  }}
-                />
-                <Input
-                  sx={signupstyle}
-                  placeholder={'email'}
-                  type="email"
-                  _placeholder={{ color: '#fff' }}
-                  value={Fields.email}
-                  onChange={e => {
-                    setFields({
-                      ...Fields,
-                      email: e.target.value,
-                    });
-                  }}
-                />
-                <Input
-                  sx={signupstyle}
-                  placeholder={'password'}
-                  type="Password"
-                  _placeholder={{ color: '#fff' }}
-                  value={Fields.password}
-                  onChange={e => {
-                    setFields({
-                      ...Fields,
-                      password: e.target.value,
-                    });
-                  }}
-                />
-                <Select
-                  onChange={e => {
-                    setFields({
-                      ...Fields,
-                      type: e.target.value,
-                    });
-                  }}
-                  sx={signupstyle}
-                  placeholder="Select option"
-                  _placeholder={{ color: '#fff' }}
-                >
-                  {roles.map(e => {
-                    return (
-                      <>
-                        <option value={e._id}> {e.name} </option>
-                      </>
-                    );
-                  })}
-                </Select>
-              </Stack>
+            <Stack>
+                  <Img
+                    cursor={'pointer'}
+                   
+                    w={'120px'}
+                    h={'120px'}
+                    objectFit={'cover'}
+                    m={'auto'}
+                    borderRadius={'50%'}
+                    src={theImage ?? defaultSrc}
+                    alt="preview"
+                  />
+                  <Input type={'file'} display={'none'} ref={profileImageRef}  onChange={(e)=>imageConverter(e.target.files)}  />
+                  <Button
+                    bg={'transparent'}
+                    color={'#fff'}
+                    _hover={{
+                      bg: 'transparent',
+                      color: 'primaryText.200',
+                    }}
+                    onClick={()=> profileImageRef?.current.click()}
+                   
+                    
+                  >
+                    Upload Avatar
+                  </Button>
+                </Stack>
+            <Stack gap={'4'}>
+            
+                  <Input
+                    sx={signupstyle}
+                    placeholder={'Name'}
+                    type="text"
+                    _placeholder={{ color: '#fff' }}
+                    value={Fields.name}
+                    onChange={e => {
+                      setFields({
+                        ...Fields,
+                        name: e.target.value,
+                      });
+                    }}
+                  />
+                 <Input
+                    sx={signupstyle}
+                    placeholder={'username'}
+                    type="username"
+                    _placeholder={{ color: '#fff' }}
+                    value={Fields.username}
+                    onChange={e => {
+                      setFields({
+                        ...Fields,
+                        username: e.target.value,
+                      });
+                    }}
+                  />
+                  <Input
+                    sx={signupstyle}
+                    placeholder={'email'}
+                    type="email"
+                    _placeholder={{ color: '#fff' }}
+                    value={Fields.email}
+                    onChange={e => {
+                      setFields({
+                        ...Fields,
+                        email: e.target.value,
+                      });
+                    }}
+                  />
+                  <Input
+                    sx={signupstyle}
+                    placeholder={'password'}
+                    type="Password"
+                    _placeholder={{ color: '#fff' }}
+                    value={Fields.password}
+                    onChange={e => {
+                      setFields({
+                        ...Fields,
+                        password: e.target.value,
+                      });
+                    }}
+                  />
+                  <Select onChange={e => {
+                      console.log(e.target.value)
+                      setFields({
+                        ...Fields,
+                        type: e.target.value,
+                      });
+                    }} sx={signupstyle} placeholder='Select option' _placeholder={{ color: '#fff' }}>
+
+                    {
+                        roles?.length &&
+                        roles?.map((e) => {
+                          return (
+                            <>
+                            <option value={e._id} > {e.name} </option>
+                            </>
+                          )
+                        })
+                    }
+      
+                    
+                  </Select>
+                </Stack>
             </ModalBody>
             <ModalFooter>
               <Stack direction={'row'} w={'full'} justifyContent={'center'}>
-                <Button
-                  onClick={() => submitForm()}
-                  bg={'pHeading.100'}
-                  color={'#fff'}
-                  px={'14'}
-                >
+                <Button onClick={() => submitForm()} bg={'pHeading.100'} color={'#fff'} px={'14'}>
                   Save Changes
                 </Button>
                 <Button onClick={onClose}>Discard</Button>
@@ -301,16 +297,16 @@ export default function TeamMember() {
           </ModalContent>
         </Modal>
         <Stack p={'4'} gap={'6'}>
-          <Stack mb={'2'} width={"100%"} direction={{base:"column",lg:"row"}} alignItems={"center"} justifyContent={'space-between'}>
+          <Stack mb={'2'} direction={'row'} justifyContent={'space-between'}>
             <Box alignItems={'center'} gap={'4'}>
               <CustomHeading
                 fontSize={'20px'}
                 color={'#fff'}
-                textAlign={{base:"center",lg:"left"}}
+                textAlign={'left'}
               >
                 Bartenders/Bouncers
               </CustomHeading>
-              <FormControl w={{base:"100%",lg:"350px"}} position={'relative'}>
+              <FormControl w={'350px'} position={'relative'}>
                 <Input
                   color={'#fff'}
                   border={'1px solid #fff !important'}
@@ -326,13 +322,12 @@ export default function TeamMember() {
                 </Button>
               </FormControl>
             </Box>
-            <Box width={{base:"100%",lg:"20%"}}>
-              <Button
+            <Box>
+            <Button
                 bg={'transparent'}
                 textAlign={'center'}
                 margin={'auto'}
                 py={'10px'}
-                width={{base:"100%",lg:"100%"}}
                 px={'8'}
                 lineHeight={'inherit'}
                 border={'1px solid #fff'}
@@ -350,9 +345,9 @@ export default function TeamMember() {
               </Button>
             </Box>
           </Stack>
-          <Team />
+         <Team/>
         </Stack>
-      </MainDashboard >
-      </ >
+      </MainDashboard>
+    </>
   );
 }

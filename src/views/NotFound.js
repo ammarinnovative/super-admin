@@ -15,7 +15,7 @@ import {
         <Box textAlign="center" fontSize="xl">
           <Flex minH="100vh" p={3} alignItems='center' justifyContent='center'>
             <Stack spacing={8} justifyContent='center'>
-              <Text fontSize={{base:"30px",lg:"60px"}} fontWeight={800} className='bgText'>
+              <Text fontSize={160} fontWeight={800} className='bgText'>
                 Ooops
               </Text>
               <Text fontSize={26} fontWeight={700}>

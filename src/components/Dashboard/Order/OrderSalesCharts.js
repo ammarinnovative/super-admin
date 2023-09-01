@@ -15,9 +15,6 @@ import { Faker } from '@faker-js/faker';
 import { Box, Stack, Text } from '@chakra-ui/react';
 import CustomHeading from '../../Website/Headings/CustomHeading';
 import BorderButton from '../../Website/Buttons/BorderButton';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { useState } from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -60,36 +57,20 @@ const labels = [
   '$400',
 ];
 
+export const data = {
+  labels,
+  datasets: [
+    {
+      fill: true,
+      label: 'Dataset 2',
+      data: labels.map(() => Math.floor(Math.random() * 1000)),
+      borderColor: '#dc0a9b',
+      backgroundColor: '#ffffff1c',
+    },
+  ],
+};
+
 export default function OrderSalesCharts() {
-  const colorCode = useSelector(state => state?.ColorCode);
-  const [data, setData] = useState({
-    labels,
-    datasets: [
-      {
-        fill: true,
-        label: 'Dataset 2',
-        data: labels.map(() => Math.floor(Math.random() * 1000)),
-        borderColor: 'pHeading.100',
-        backgroundColor: '#ffffff1c',
-      },
-    ],
-  });
-
-  useEffect(() => {
-    setData({
-      labels,
-      datasets: [
-        {
-          fill: true,
-          label: 'Dataset 2',
-          data: labels.map(() => Math.floor(Math.random() * 1000)),
-          borderColor: colorCode,
-          backgroundColor: '#ffffff1c',
-        },
-      ],
-    });
-  }, [colorCode]);
-
   return (
     <>
       <Stack>
@@ -105,13 +86,13 @@ export default function OrderSalesCharts() {
             fontSize={'23px'}
             color={'#fff'}
           >
-            Total Sales
+            Membership Subscribers
           </CustomHeading>
           <Box>
-            <BorderButton Url={'/'} Btnctn={'View Past Report'} />
+            <BorderButton Url={'/'} Btnctn={'Last 7 days'} />
           </Box>
         </Stack>
-        <Box bg={'#212121'} width={"100%"} p={'4'}>
+        <Box bg={'#212121'} p={'41px 20px'}>
           <Line options={options} data={data} />
         </Box>
       </Stack>

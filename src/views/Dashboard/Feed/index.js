@@ -29,8 +29,8 @@ import { Icon } from '@chakra-ui/icons';
 import { POST, GET } from '../../../utilities/ApiProvider.js';
 import { useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { baseUrl } from '../../../utilities/Config';
+
 export default function Post() {
   // setup up state Variables
 
@@ -39,16 +39,7 @@ export default function Post() {
   const [hashtagData, sethashtagData] = useState([]);
   const toast = useToast();
   const [isLoading, setisLoading] = useState(false);
-  const[localItem,setLocalItem] = useState(false);
 
-  const navigate = useNavigate();
-  
-  const user = useSelector(state=>state?.value);
-  useEffect(() => {
-    if(!user){
-      navigate("/dashboard/login");
-    }
-  }, [user]);
   const OverlayOne = () => (
     <ModalOverlay
       bg="blackAlpha.300"
@@ -66,11 +57,12 @@ export default function Post() {
   }, []);
 
   const getPosts = async () => {
-    var response = await GET('post');
+    var response = await GET(`${baseUrl}post`);
+    console.log(response);
     setPost(response.data);
   };
   const getHastags = async () => {
-    var response = await GET('admin/hashtag');
+    var response = await GET(`${baseUrl}admin/hashtag`);
     setHashtags(response.data);
   };
 
@@ -98,18 +90,17 @@ export default function Post() {
       formData.append('description', Fields.description);
       formData.append('hastags',hashtagData);
 
-      var response = await POST('post', formData);
+      var response = await POST('/post', formData);
 
 
 
       toast({
         description: response.message,
-        status: "success",
+        status: response.status,
         isClosable: true,
         position: 'bottom-left',
         duration: 2500,
       });
-      getPosts()
 
       setFields({
         username: '',
@@ -138,7 +129,6 @@ export default function Post() {
 
   return (
     <>
-  
       <MainDashboard>
         <Modal size={'3xl'} isCentered isOpen={isOpen} onClose={onClose}>
           {overlay}
@@ -243,7 +233,8 @@ export default function Post() {
                     flexWrap={'wrap'}
                     color={'#fff'}
                   >
-                    {Hashtags.map(e => {
+                    {Hashtags?.length &&
+                    Hashtags?.map(e => {
                           return (
                             <Checkbox
                             border={'1px solid #fff'}
@@ -319,7 +310,8 @@ export default function Post() {
             </Box>
           </Stack>
           <Stack direction={'row'} flexWrap={'wrap'} spacing={'0'} gap={'4'}>
-            {posts.map(e => {
+            {posts?.length &&
+            posts?.map(e => {
               return (
                 <Box w={'515px'} bg={'dashbg.100'}>
                   <Stack p={'4'}>
@@ -359,7 +351,7 @@ export default function Post() {
             })}
           </Stack>
         </Stack>
-      </MainDashboard>      
+      </MainDashboard>
     </>
   );
 }
