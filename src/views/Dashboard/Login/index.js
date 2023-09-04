@@ -55,17 +55,18 @@ export default function Index() {
   const [Fields, setFields] = useState({
     username: '',
     password: '',
+    role:"superadmmin",
+    fcm: '',
   });
 
   const submitForm = async () => {
     try {
       setisLoading(true);
-      const formData = new FormData();
 
-      if (Fields.username === '' && Fields.password === '') {
+      if (Fields.username === '' || Fields.password === '') {
         toast({
           status: 'error',
-          title: 'Please fill in all the fields to proceed further.',
+          description: 'Please fill in all the fields to proceed further.',
           duration: 7000,
           isClosable: true,
           position: 'bottom-left',
@@ -74,14 +75,8 @@ export default function Index() {
         return;
       }
 
-      formData.append('action', 'CONTACT');
-
-      formData.append('username', Fields.username);
-      formData.append('password', Fields.password);
-
-      var response = await POST('/users/login', formData);
-
-      console.log(response);
+      var response = await POST('users/login', Fields);
+      console.log('response', response);
 
       if (response.status === 'success') {
         if (remember) {
@@ -91,6 +86,7 @@ export default function Index() {
 
       dispatch(loadUser(response.data));
       localStorage.setItem('user', JSON.stringify(response.data));
+      navigate('/dashboard');
 
       toast({
         description: response.message,
@@ -145,10 +141,10 @@ export default function Index() {
       setFields({
         username: '',
         password: '',
+        role:"superadmmin",
+        fcm: '',
       });
     }
-
-    
   }, [user]);
 
   return (
@@ -184,7 +180,6 @@ export default function Index() {
                   username: e.target.value,
                 });
               }}
-              // setFields={username => setFields({ ...Fields, username })}
             />
             <Input
               sx={signupstyle}
@@ -208,7 +203,12 @@ export default function Index() {
             >
               Remember Password
             </Checkbox>
-            <Link w={'48%'} color={'#fff'} as={ReactLink} to={'/dashboard/forgot'}>
+            <Link
+              w={'48%'}
+              color={'#fff'}
+              as={ReactLink}
+              to={'/dashboard/forgot'}
+            >
               Forgot Password?
             </Link>
           </Stack>
