@@ -191,8 +191,6 @@ export default function Menu() {
                     <CustomPara> Bourbon</CustomPara>
                     </Flex>
                     <BorderButton w={'full'}  Url={'./'} Btnctn={'$49.00'} />
-                    
-                    
                   </Box>
                 </Stack>
               </Box>

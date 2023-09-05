@@ -9,8 +9,6 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, Image, Stack, Text } from '@chakra-ui/react';
-import React from 'react';
 import MainDashboard from '../MainDashboard';
 import CustomHeading from '../../../components/Website/Headings/CustomHeading';
 import OrderBox from '../../../components/Dashboard/Order/OrderBox';
@@ -22,9 +20,6 @@ import { Icon } from '@chakra-ui/icons';
 import { Link } from '@chakra-ui/react';
 import { imgUrl } from '../../../utilities/Config';
 import { useSelector } from 'react-redux';
-import { AiFillPlusCircle } from 'react-icons/ai'
-import { Icon } from '@chakra-ui/icons';
-import { Link } from '@chakra-ui/react'
 import cat1 from '../../../assets/images/menu/c1.jpg';
 import Users from '../../../assets/images/users.png';
 import BorderButton from '../../../components/Website/Buttons/BorderButton';
@@ -34,6 +29,9 @@ import { GET } from '../../../utilities/ApiProvider';
 export default function Index() {
   const [user, setUser] = useState({});
   const [data, setData] = useState([]);
+  const [totalSales,setTotalSales] =useState([]);
+  const [timeFrameData,setTimeFrameData] =useState([]);
+  const [] =useState([]);
   const selector = useSelector(state => state);
 
   useEffect(() => {
@@ -49,20 +47,31 @@ export default function Index() {
     setData(res?.data);
   };
 
+  const getChartData = async ()=>{
+    const res = await GET("admin/analytics?timeframe=weekly",{
+      authorization:`bearer ${user?.verificationToken}`
+    });
+    setTotalSales(res?.data?.totalSales);
+    setTimeFrameData(res?.data?.timeframeData)
+  }
+
+
   useEffect(() => {
     if (user) {
       getData();
+      getChartData();
     }
   }, [user]);
-  console.log(data);
+
+  
 
   return (
     <>
       <MainDashboard title={'Home'}>
-        {/* First row stack starts */}
+        {/ First row stack starts /}
         <Stack p={'4'} direction={'row'}>
           <Stack mb={'6'} direction={'row'} w={'30%'}>
-            {/* Upload menu icon div starts */}
+            {/ Upload menu icon div starts /}
             <Box>
               <CustomHeading
                 textAlign={'left'}
@@ -90,11 +99,11 @@ export default function Index() {
                 </Link>
               </Text>
             </Box>
-            {/* Upload menu icon div Ends */}
+            {/ Upload menu icon div Ends /}
           </Stack>
 
           <Stack pb={'20'} pl={'25px'} gap={'6'}>
-            {/* <OrderBox /> */}
+            {/ <OrderBox /> /}
             <Box w={'100%'} display={'inline-block'} direction={'row'}>
               <Flex>
                 <Box display={'inline-block'} w={'79%'}>
@@ -160,24 +169,24 @@ export default function Index() {
             </Stack>
           </Stack>
         </Stack>
-        {/* First row stack Ends */}
+        {/ First row stack Ends /}
 
-        {/* Second row stack starts */}
+        {/ Second row stack starts /}
         <Stack
           direction={'row'}
           alignItems={'flex-end'}
           justifyContent={'space-between'}
         >
           <Box w={'60%'} p={'0px 10px'}>
-            <OrderSalesCharts />
+            <OrderSalesCharts totalSales={totalSales} timeFrameData={timeFrameData} />
           </Box>
           <Box w={'40%'} p={'0px 10px'}>
             <BarOwners data={data?.registeredBars} />
           </Box>
         </Stack>
-        {/* Second row stack Ends */}
+        {/ Second row stack Ends /}
 
-        {/* Third row stack Starts */}
+        {/ Third row stack Starts /}
         <Stack
           alignItems={'center'}
           justifyContent={'space-between'}
@@ -196,7 +205,7 @@ export default function Index() {
                 Total Menu
               </Text>
               <Text color={'#f40095'} fontSize={'40px'}>
-                45
+                {data?.menu}
               </Text>
               <Link as={ReactLink} to={'/dashboard/menu'} color={'#fff'}>
                 View All
@@ -207,7 +216,7 @@ export default function Index() {
                 Active User's
               </Text>
               <Text color={'#f40095'} fontSize={'40px'}>
-                1,025
+               {data?.activeUsers}
               </Text>
               <Link as={ReactLink} to={'/dashboard/users'} color={'#fff'}>
                 View All
@@ -252,7 +261,6 @@ export default function Index() {
             </Stack>
           </Stack>
         </Stack>
-        {/* Third row stack Ends */}
       </MainDashboard>
     </>
   );

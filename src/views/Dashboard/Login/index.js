@@ -76,15 +76,14 @@ export default function Index() {
       }
 
       var response = await POST('users/login', Fields);
-      console.log('response', response);
-
+      console.log('response', response.data);
+      dispatch(loadUser(response.data));
       if (response.status === 'success') {
         if (remember) {
           localStorage.setItem('userCreds', JSON.stringify(Fields));
         }
       }
 
-      dispatch(loadUser(response.data));
       localStorage.setItem('user', JSON.stringify(response.data));
       navigate('/dashboard');
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,10 +11,12 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
 import { Faker } from '@faker-js/faker';
 import { Box, Stack, Text } from '@chakra-ui/react';
 import CustomHeading from '../../Website/Headings/CustomHeading';
 import BorderButton from '../../Website/Buttons/BorderButton';
+import { GET } from '../../../utilities/ApiProvider';
 
 ChartJS.register(
   CategoryScale,
@@ -40,37 +42,38 @@ export const options = {
   },
 };
 
-const labels = [
-  '$10',
-  '$50',
-  '$100',
-  '$150',
-  '$200',
-  '$300',
-  '$400',
-  '$10',
-  '$50',
-  '$100',
-  '$150',
-  '$200',
-  '$300',
-  '$400',
-];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      fill: true,
-      label: 'Dataset 2',
-      data: labels.map(() => Math.floor(Math.random() * 1000)),
-      borderColor: '#dc0a9b',
-      backgroundColor: '#ffffff1c',
-    },
-  ],
-};
 
-export default function OrderSalesCharts() {
+export default function OrderSalesCharts({ timeFrameData, totalSales }) {
+  console.log('timeFrameData', timeFrameData);
+  console.log('totalSales', totalSales);
+
+  const [data, setData] = useState({
+    label:[],
+    datasets: [
+      {
+        fill: true,
+        label: 'Dataset 2',
+        data: [],
+        borderColor: '#dc0a9b',
+        backgroundColor: '#ffffff1c',
+      },
+    ],
+  });
+
+
+  useEffect(() => {
+    setData({
+      labels: timeFrameData,
+      datasets: [
+        {
+          ...data.datasets[0],
+          data: totalSales,
+        },
+      ],
+    });
+  }, [totalSales, timeFrameData]);
+
   return (
     <>
       <Stack>
