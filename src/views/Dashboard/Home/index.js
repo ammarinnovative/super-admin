@@ -29,6 +29,9 @@ import { GET } from '../../../utilities/ApiProvider';
 export default function Index() {
   const [user, setUser] = useState({});
   const [data, setData] = useState([]);
+  const [totalSales,setTotalSales] =useState([]);
+  const [timeFrameData,setTimeFrameData] =useState([]);
+  const [] =useState([]);
   const selector = useSelector(state => state);
 
   useEffect(() => {
@@ -44,12 +47,23 @@ export default function Index() {
     setData(res?.data);
   };
 
+  const getChartData = async ()=>{
+    const res = await GET("admin/analytics?timeframe=weekly",{
+      authorization:`bearer ${user?.verificationToken}`
+    });
+    setTotalSales(res?.data?.totalSales);
+    setTimeFrameData(res?.data?.timeframeData)
+  }
+
+
   useEffect(() => {
     if (user) {
       getData();
+      getChartData();
     }
   }, [user]);
-  console.log(data);
+
+  
 
   return (
     <>
@@ -164,7 +178,7 @@ export default function Index() {
           justifyContent={'space-between'}
         >
           <Box w={'60%'} p={'0px 10px'}>
-            <OrderSalesCharts />
+            <OrderSalesCharts totalSales={totalSales} timeFrameData={timeFrameData} />
           </Box>
           <Box w={'40%'} p={'0px 10px'}>
             <BarOwners data={data?.registeredBars} />
@@ -191,7 +205,7 @@ export default function Index() {
                 Total Menu
               </Text>
               <Text color={'#f40095'} fontSize={'40px'}>
-                45
+                {data?.menu}
               </Text>
               <Link as={ReactLink} to={'/dashboard/menu'} color={'#fff'}>
                 View All
@@ -202,7 +216,7 @@ export default function Index() {
                 Active User's
               </Text>
               <Text color={'#f40095'} fontSize={'40px'}>
-                1,025
+               {data?.activeUsers}
               </Text>
               <Link as={ReactLink} to={'/dashboard/users'} color={'#fff'}>
                 View All
@@ -247,7 +261,6 @@ export default function Index() {
             </Stack>
           </Stack>
         </Stack>
-        {/* Third row stack Ends */}
       </MainDashboard>
     </>
   );

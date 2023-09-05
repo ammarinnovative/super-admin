@@ -32,7 +32,8 @@ export default function Index() {
     city: '',
     email: '',
     phone: '',
-    message: '',
+    overviewReport:"true",
+    email_notification:"true"
   });
 
 
@@ -190,7 +191,6 @@ useEffect(()=>{
                           placeholder={'email'}
                           name={'email'}
                           value={Fields.email}
-                          setFields={email => setFields({ ...Fields, email })}
                         />
                         <ContactFields
                           type={'text'}

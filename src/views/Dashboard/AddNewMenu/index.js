@@ -25,13 +25,9 @@ export default function Menu() {
     categories: [{ parent: '', child: [] }],
     pictures: '',
   });
-  const [user,setUser] = useState("");
-
-
-
+  const [user, setUser] = useState('');
 
   const submitData = async () => {
-    console.log(fields);
     const formData = new FormData();
     for (const key in fields) {
       if (fields.hasOwnProperty(key)) {
@@ -39,42 +35,45 @@ export default function Menu() {
       }
     }
 
-    console.log(fields);
-  
-    const res = await POST("admin/menu",formData,{
-      authorization:`bearer ${user?.verificationToken}`
+    const res = await POST('admin/menu', formData, {
+      authorization: `bearer ${user?.verificationToken}`,
     });
-
-    console.log(res);
-
-  
-  
   };
-
 
   const getMenuData = res => {
     setFields({
       ...fields,
-      categories: [{ parent: res, ...fields.categories }],
+      categories: [{ parent: res, child: [] }],
     });
   };
 
+  // let tempArr = [];
 
   const getSubCatId = res => {
+    // tempArr.push(res);
+
+    // console.log(tempArr);
+    
     setFields({
       ...fields,
-      categories: [{ ...fields.categories, child: [res] }],
+      categories: [
+        {
+          parents: fields.categories[0]['parent'],
+          child: [...fields.categories[0]['child'], res],
+        },
+      ],
     });
   };
 
-  const selector = useSelector(state=>state);
-  
+  useEffect(() => {
+    console.log(fields.categories);
+  }, [fields]);
 
-  useEffect(()=>{
+  const selector = useSelector(state => state);
+
+  useEffect(() => {
     setUser(selector?.value);
-  },[selector]);
-
-  
+  }, [selector]);
 
   return (
     <>
