@@ -5,15 +5,22 @@ import {
   Link,
   Stack,
   Text,
+<<<<<<< HEAD
   Button,
   Textarea,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+=======
+  Textarea,
+} from '@chakra-ui/react';
+import React from 'react';
+>>>>>>> parent of 102f974 (lelo)
 import CustomHeading from '../../../components/Website/Headings/CustomHeading';
 import MainDashboard from '../MainDashboard';
 import CategoryMenu from '../../../components/Dashboard/Menu/CategoryMenu.js';
 import BorderButton from '../../../components/Website/Buttons/BorderButton';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+<<<<<<< HEAD
 import { useSelector } from 'react-redux';
 import { Icon } from '@chakra-ui/icons';
 import { POST } from '../../../utilities/ApiProvider';
@@ -76,6 +83,12 @@ export default function Menu() {
 
   
 
+=======
+import { Icon } from '@chakra-ui/icons';
+
+
+export default function Menu() {
+>>>>>>> parent of 102f974 (lelo)
   return (
     <>
       <MainDashboard>
@@ -98,6 +111,7 @@ export default function Menu() {
           {/* First Div Ends */}
 
           {/* Second Div Starts */}
+<<<<<<< HEAD
           <Stack
             direction={'row'}
             justifyContent={'space-between'}
@@ -164,6 +178,52 @@ export default function Menu() {
               <Button onClick={submitData}>sub</Button>
             </form>
             <CategoryMenu getSubCatId={getSubCatId} getMenuData={getMenuData} />
+=======
+          <Stack direction={'row'} justifyContent={'space-between'} verticalAlign={'top'}>
+            <Box w={'60%'} alignItems={'center'} gap={'4'}>
+              <Stack w={'100%'}>
+                <Box>
+                  <Input
+                    w={'100%'}
+                    py={'6'}
+                    placeholder={'Menu Name'}
+                    type={'Text'}
+                    fontSize={'14px'}
+                    border={'1px solid #fff !important'}
+                    borderRadius={'10px'}
+                    fontWeight={500}
+                    color={'#fff !important'}
+                    _focus={{
+                      border: '2px solid #fff !important',
+                      borderColor: '#fff !important',
+                      outline: '0px !impoartant',
+
+                    }}
+                    _placeholder={{ color: '#fff' }}
+                  />
+                  <Textarea
+                    mt={'15px'}
+                    py={'4'}
+                    color={'#fff'}
+                    borderRadius={'10px'}
+                    height={'100px'}
+                    placeholder={'Description'}
+                    fontSize={'14px'}
+                    border={'1px solid #fff !important'}
+                    fontWeight={500}
+                    borderColor={'primaryBlue.100'}
+                    resize={'none'}
+                    _focus={{
+                      borderColor: 'primaryOrange.100',
+                      outline: 'none',
+                    }}
+                    _placeholder={{ color: '#fff' }}
+                  ></Textarea>
+                </Box>
+              </Stack>
+            </Box>
+            <CategoryMenu />
+>>>>>>> parent of 102f974 (lelo)
           </Stack>
           {/* Second Div Ends */}
         </Stack>
