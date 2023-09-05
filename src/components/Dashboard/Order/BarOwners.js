@@ -14,10 +14,15 @@ import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import CustomHeading from '../../Website/Headings/CustomHeading';
 import BorderButton from '../../Website/Buttons/BorderButton';
 import Ownerprofile from '../../../assets/images/01.png';
+<<<<<<< HEAD
 import { imgUrl } from '../../../utilities/Config';
 
 export default function BarOwners({ data }) {
   console.log(data);
+=======
+
+export default function BarOwners() {
+>>>>>>> parent of 102f974 (lelo)
   return (
     <>
       <Stack>
@@ -40,6 +45,7 @@ export default function BarOwners({ data }) {
           </Box>
         </Stack>
         <Box bg={'#212121'} p={'4'}>
+<<<<<<< HEAD
           <Text color={'#fff'} fontSize={'24px'}>
             115 Bar Owner
           </Text>
@@ -74,6 +80,69 @@ export default function BarOwners({ data }) {
               No Data Found
             </Text>
           )}
+=======
+          <Text color={'#fff'} fontSize={'24px'}>115 Bar Owner</Text>
+          <Stack
+            alignItems={'center'}
+            justifyContent={'space-between'}
+            direction={'row'}
+            borderBottom={'solid 1px #fff'}
+            pb={'15px'}
+            mt={'15px'}
+          >
+            <Box color={'#fff'}>
+            <Image src={Ownerprofile} />
+            </Box>
+            <Box color={'#fff'}>
+              <Text fontSize={'20px'}>Infinity Night Club</Text>
+              <Text opacity={'0.4'}>Louisville, KY</Text>
+            </Box>
+            <Box color={'#fff'}>
+              <BorderButton Url={'/'} Btnctn={'See Profile'} />
+            </Box>
+          </Stack>
+
+          <Stack
+            alignItems={'center'}
+            justifyContent={'space-between'}
+            direction={'row'}
+            borderBottom={'solid 1px #fff'}
+            pb={'15px'}
+            mt={'15px'}
+          >
+            <Box color={'#fff'}>
+            <Image src={Ownerprofile} />
+            </Box>
+            <Box color={'#fff'}>
+              <Text fontSize={'20px'}>Infinity Night Club</Text>
+              <Text opacity={'0.4'}>Louisville, KY</Text>
+            </Box>
+            <Box color={'#fff'}>
+              <BorderButton Url={'/'} Btnctn={'See Profile'} />
+            </Box>
+          </Stack>
+
+          <Stack
+            alignItems={'center'}
+            justifyContent={'space-between'}
+            direction={'row'}
+            borderBottom={'solid 1px #fff'}
+            pb={'15px'}
+            mt={'15px'}
+          >
+            <Box color={'#fff'}>
+            <Image src={Ownerprofile} />
+            </Box>
+            <Box color={'#fff'}>
+              <Text fontSize={'20px'}>Infinity Night Club</Text>
+              <Text opacity={'0.4'}>Louisville, KY</Text>
+            </Box>
+            <Box color={'#fff'}>
+              <BorderButton Url={'/'} Btnctn={'See Profile'} />
+            </Box>
+          </Stack>
+
+>>>>>>> parent of 102f974 (lelo)
         </Box>
       </Stack>
     </>
