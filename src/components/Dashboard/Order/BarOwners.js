@@ -14,8 +14,10 @@ import { Box, Image, Stack, Text } from '@chakra-ui/react';
 import CustomHeading from '../../Website/Headings/CustomHeading';
 import BorderButton from '../../Website/Buttons/BorderButton';
 import Ownerprofile from '../../../assets/images/01.png';
+import { imgUrl } from '../../../utilities/Config';
 
-export default function BarOwners() {
+export default function BarOwners({ data }) {
+  console.log(data);
   return (
     <>
       <Stack>
@@ -38,67 +40,40 @@ export default function BarOwners() {
           </Box>
         </Stack>
         <Box bg={'#212121'} p={'4'}>
-          <Text color={'#fff'} fontSize={'24px'}>115 Bar Owner</Text>
-          <Stack
-            alignItems={'center'}
-            justifyContent={'space-between'}
-            direction={'row'}
-            borderBottom={'solid 1px #fff'}
-            pb={'15px'}
-            mt={'15px'}
-          >
-            <Box color={'#fff'}>
-            <Image src={Ownerprofile} />
-            </Box>
-            <Box color={'#fff'}>
-              <Text fontSize={'20px'}>Infinity Night Club</Text>
-              <Text opacity={'0.4'}>Louisville, KY</Text>
-            </Box>
-            <Box color={'#fff'}>
-              <BorderButton Url={'/'} Btnctn={'See Profile'} />
-            </Box>
-          </Stack>
-
-          <Stack
-            alignItems={'center'}
-            justifyContent={'space-between'}
-            direction={'row'}
-            borderBottom={'solid 1px #fff'}
-            pb={'15px'}
-            mt={'15px'}
-          >
-            <Box color={'#fff'}>
-            <Image src={Ownerprofile} />
-            </Box>
-            <Box color={'#fff'}>
-              <Text fontSize={'20px'}>Infinity Night Club</Text>
-              <Text opacity={'0.4'}>Louisville, KY</Text>
-            </Box>
-            <Box color={'#fff'}>
-              <BorderButton Url={'/'} Btnctn={'See Profile'} />
-            </Box>
-          </Stack>
-
-          <Stack
-            alignItems={'center'}
-            justifyContent={'space-between'}
-            direction={'row'}
-            borderBottom={'solid 1px #fff'}
-            pb={'15px'}
-            mt={'15px'}
-          >
-            <Box color={'#fff'}>
-            <Image src={Ownerprofile} />
-            </Box>
-            <Box color={'#fff'}>
-              <Text fontSize={'20px'}>Infinity Night Club</Text>
-              <Text opacity={'0.4'}>Louisville, KY</Text>
-            </Box>
-            <Box color={'#fff'}>
-              <BorderButton Url={'/'} Btnctn={'See Profile'} />
-            </Box>
-          </Stack>
-
+          <Text color={'#fff'} fontSize={'24px'}>
+            115 Bar Owner
+          </Text>
+          {data?.length > 0 ? (
+            data?.map(item => {
+              return (
+                <Stack
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                  direction={'row'}
+                  borderBottom={'solid 1px #fff'}
+                  pb={'15px'}
+                  mt={'15px'}
+                >
+                  <Box color={'#fff'}>
+                    {
+                      item?.upload_document? <Image src={imgUrl+item?.upload_document} />: <Image src={Ownerprofile} />
+                    }
+                  </Box>
+                  <Box color={'#fff'}>
+                    <Text fontSize={'20px'}>{item?.barName}</Text>
+                    <Text opacity={'0.4'}>{item?.address}</Text>
+                  </Box>
+                  <Box color={'#fff'}>
+                    <BorderButton Url={'/'} Btnctn={'See Profile'} />
+                  </Box>
+                </Stack>
+              );
+            })
+          ) : (
+            <Text color={'white'} fontSize={'17px'}>
+              No Data Found
+            </Text>
+          )}
         </Box>
       </Stack>
     </>

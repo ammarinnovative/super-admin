@@ -10,7 +10,7 @@ import {
   Box,
   useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import CustomHeading from '../../../components/Website/Headings/CustomHeading';
 import MainDashboard from '../MainDashboard';
@@ -18,12 +18,15 @@ import Teamone from '../../../assets/images/Team/t1.jpg';
 import { Link as Reactlink } from 'react-router-dom';
 import PrimaryBtn from '../../../components/Website/Buttons/PrimaryBtn';
 import ContactFields from '../../../components/Website/Contact/ContactFields';
+import { useSelector } from 'react-redux';
 import { POST } from '../../../utilities/ApiProvider';
 import CustomPara from '../../../components/Website/Paragraph/CustomPara';
 
 export default function Index() {
+  
   const toast = useToast();
   const [isLoading, setisLoading] = useState(false);
+  const [user,setUser] = useState({});
   const [Fields, setFields] = useState({
     name: '',
     city: '',
@@ -32,37 +35,31 @@ export default function Index() {
     message: '',
   });
 
+
+
+  const selector = useSelector(state=>state);
   const submitForm = async () => {
     try {
       setisLoading(true);
-      const formData = new FormData();
-
-      if (
-        Fields.name === '' &&
-        Fields.city === '' &&
-        Fields.email === '' &&
-        Fields.phone === '' &&
-        Fields.message === ''
-      ) {
-        toast({
-          status: 'error',
-          title: 'Please fill in all the fields to proceed further.',
-          duration: 7000,
-          isClosable: true,
-          position: 'bottom-left',
-        });
-        setisLoading(false);
-        return;
+      
+      const objData = {
+        name:Fields.name,
+        city:Fields.city,
+        phone:Fields.phone
       }
 
-      formData.append('action', 'CONTACT');
-      formData.append('name', Fields.name);
-      formData.append('city', Fields.city);
-      formData.append('email', Fields.email);
-      formData.append('phone', Fields.phone);
-      formData.append('message', Fields.message);
+      if(Fields.name.length == 0){
+        delete objData.name
+      }
+      if(Fields.city.length == 0){
+        delete objData.city
+      }
+      if(Fields.phone == 0){
+        delete objData.phone
+      }
 
-      let response = await POST('/mailtest/emailer.php', formData, {
+
+      let response = await POST('/mailtest/emailer.php', objData, {
         'Content-Type': 'application/x-www-form-urlencoded',
       });
 
@@ -73,15 +70,6 @@ export default function Index() {
         position: 'bottom-left',
         duration: 2500,
       });
-
-      setFields({
-        name: '',
-        city: '',
-        email: '',
-        phone: '',
-        message: '',
-      });
-
       setisLoading(false);
     } catch (err) {
       toast({
@@ -91,8 +79,19 @@ export default function Index() {
         position: 'bottom-left',
         duration: 2500,
       });
+      setisLoading(false);
     }
   };
+
+
+  useEffect(()=>{
+    if(selector){
+      setUser(selector?.value)
+    }
+  },[selector]);
+
+
+  console.log(user);
 
   const settb = {
     bg: 'pHeading.100',
@@ -100,6 +99,18 @@ export default function Index() {
     px: '8',
     borderRadius: '6',
   };
+
+
+
+useEffect(()=>{
+  setFields({
+    ...Fields,
+    name:user?.username,
+    city: user?.address,
+    email:user?.email,
+    phone:user?.phone??"No phone number"
+  })
+},[user]);
 
   return (
     <>
