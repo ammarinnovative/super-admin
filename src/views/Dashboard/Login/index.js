@@ -76,23 +76,15 @@ export default function Index() {
       }
 
       var response = await POST('users/login', Fields);
-<<<<<<< HEAD
-      console.log('response', response.data);
-      dispatch(loadUser(response.data));
-=======
       console.log('response', response);
 
->>>>>>> parent of 102f974 (lelo)
       if (response.status === 'success') {
         if (remember) {
           localStorage.setItem('userCreds', JSON.stringify(Fields));
         }
       }
 
-<<<<<<< HEAD
-=======
       dispatch(loadUser(response.data));
->>>>>>> parent of 102f974 (lelo)
       localStorage.setItem('user', JSON.stringify(response.data));
       navigate('/dashboard');
 
