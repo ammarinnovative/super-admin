@@ -36,10 +36,7 @@ import {
   FiChevronDown,
 } from 'react-icons/fi';
 import { AiOutlineDollar } from 'react-icons/ai';
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
-=======
->>>>>>> parent of 102f974 (lelo)
 import { Link as Reactlink } from 'react-router-dom';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
@@ -163,15 +160,12 @@ const NavItem = ({ icon, url, children, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, title, ...rest }) => {
-<<<<<<< HEAD
 
   const navigate = useNavigate();
 
   const Remove = ()=>{
     navigate('/dashboard/login')
   }
-=======
->>>>>>> parent of 102f974 (lelo)
   return (
     <Flex
       ml={{ base: 0, md: '270px' }}
@@ -250,11 +244,7 @@ const MobileNav = ({ onOpen, title, ...rest }) => {
                 <MenuItem>Settings</MenuItem>
                 <MenuItem>Billing</MenuItem>
                 <MenuDivider />
-<<<<<<< HEAD
                 <MenuItem onClick={Remove}>Sign out</MenuItem>
-=======
-                <MenuItem>Sign out</MenuItem>
->>>>>>> parent of 102f974 (lelo)
               </MenuList>
             </Menu>
           </Flex>
