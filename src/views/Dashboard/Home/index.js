@@ -68,10 +68,10 @@ export default function Index() {
   return (
     <>
       <MainDashboard title={'Home'}>
-        {/* First row stack starts */}
+        {/ First row stack starts /}
         <Stack p={'4'} direction={'row'}>
           <Stack mb={'6'} direction={'row'} w={'30%'}>
-            {/* Upload menu icon div starts */}
+            {/ Upload menu icon div starts /}
             <Box>
               <CustomHeading
                 textAlign={'left'}
@@ -99,11 +99,11 @@ export default function Index() {
                 </Link>
               </Text>
             </Box>
-            {/* Upload menu icon div Ends */}
+            {/ Upload menu icon div Ends /}
           </Stack>
 
           <Stack pb={'20'} pl={'25px'} gap={'6'}>
-            {/* <OrderBox /> */}
+            {/ <OrderBox /> /}
             <Box w={'100%'} display={'inline-block'} direction={'row'}>
               <Flex>
                 <Box display={'inline-block'} w={'79%'}>
@@ -169,9 +169,9 @@ export default function Index() {
             </Stack>
           </Stack>
         </Stack>
-        {/* First row stack Ends */}
+        {/ First row stack Ends /}
 
-        {/* Second row stack starts */}
+        {/ Second row stack starts /}
         <Stack
           direction={'row'}
           alignItems={'flex-end'}
@@ -184,9 +184,9 @@ export default function Index() {
             <BarOwners data={data?.registeredBars} />
           </Box>
         </Stack>
-        {/* Second row stack Ends */}
+        {/ Second row stack Ends /}
 
-        {/* Third row stack Starts */}
+        {/ Third row stack Starts /}
         <Stack
           alignItems={'center'}
           justifyContent={'space-between'}
